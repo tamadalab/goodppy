@@ -6,28 +6,87 @@ import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 
 /**
- * 評価するリポジトリに関する操作を行うクラス
+ * 評価するリポジトリについて操作を行うクラス
  */
 public class RepositoryController {
-	private String repositoryUrl;
 
+	/**
+	 * クローン先のディレクトリのパス
+	 */
 	private String localPath;
 
 	/**
-	 * @param repositoryUrl
-	 * @param localPath
+	 * リポジトリのオーナー名
 	 */
-	public RepositoryController(String repositoryUrl, String localPath) {
+	private String owner;
+
+	/**
+	 * リポジトリ名
+	 */
+	private String repositoryName;
+
+	/**
+	 * リポジトリのURL
+	 */
+	private String repositoryUrl;
+
+	/**
+	 * コンストラクタ
+	 */
+	public RepositoryController(String repositoryUrl) {
 		this.repositoryUrl = repositoryUrl;
-		this.localPath = localPath;
+		this.owner = makeUrlParts()[makeUrlParts().length - 2];
+		this.repositoryName = makeUrlParts()[makeUrlParts().length - 1].replace(".git", "");
+		this.localPath = "./repositories/" + getOwner() + "/" + getRepositoryName(); // ./repositories/owner/repositoryName
+
+		return;
 	}
 
-	public void GitClone() {
+	/**
+	 * クローン先のディレクトリのパスを取得する
+	 * 
+	 * @return クローン先のディレクトリのパス
+	 */
+	public String getLocalPath() {
+		return this.localPath;
+	}
+
+	/**
+	 * リポジトリのオーナー名を取得する
+	 * 
+	 * @return リポジトリのオーナー名
+	 */
+	public String getOwner() {
+		return this.owner;
+	}
+
+	/**
+	 * リポジトリ名を取得する
+	 * 
+	 * @return リポジトリ名
+	 */
+	public String getRepositoryName() {
+		return this.repositoryName;
+	}
+
+	/**
+	 * リポジトリのURLを取得する
+	 * 
+	 * @return リポジトリのURL
+	 */
+	public String getRepositoryUrl() {
+		return this.repositoryUrl;
+	}
+
+	/**
+	 * リポジトリをクローンする
+	 */
+	public void gitClone() {
 		try {
-			System.out.println("Repository is being cloned ...");
+			System.out.println("Repository is being cloned...");
 			Git.cloneRepository()
-					.setURI(repositoryUrl)
-					.setDirectory(new File(localPath))
+					.setURI(getRepositoryUrl())
+					.setDirectory(new File(getLocalPath()))
 					.call();
 			System.out.println("Repository has been cloned.");
 		} catch (GitAPIException e) {
@@ -38,4 +97,38 @@ public class RepositoryController {
 		return;
 	}
 
+	/**
+	 * リポジトリのURLを「/」で区切る
+	 * 
+	 * @return リポジトリのURLのパース結果
+	 */
+	public String[] makeUrlParts() {
+		String[] urlParts = getRepositoryUrl().split("/");
+
+		return urlParts;
+	}
+
+	// public void setLocalPath(String localPath) {
+	// this.localPath = localPath;
+
+	// return;
+	// }
+
+	// public void setOwner(String owner) {
+	// this.owner = owner;
+
+	// return;
+	// }
+
+	// public void setRepositoryName(String repositoryName) {
+	// this.repositoryName = repositoryName;
+
+	// return;
+	// }
+
+	// public void setRepositoryUrl(String repositoryUrl) {
+	// this.repositoryUrl = repositoryUrl;
+
+	// return;
+	// }
 }
