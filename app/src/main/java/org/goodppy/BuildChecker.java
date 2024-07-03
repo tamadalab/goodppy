@@ -13,7 +13,7 @@ import java.util.Calendar;
 public class BuildChecker {
 
 	/**
-	 * ログファイルの
+	 * ログファイルを保存するディレクトリのパス
 	 */
 	private String logFileDirectory;
 
@@ -33,6 +33,7 @@ public class BuildChecker {
 	 * ビルドが行えるかをチェックする
 	 * 
 	 * @param localPath クローン先のディレクトリのパス
+	 * @param repositoryUrl リポジトリのURL
 	 */
 	public void buildCheck(String localPath, String repositoryUrl) {
 		try {
@@ -42,7 +43,7 @@ public class BuildChecker {
 			builder.directory(new File(localPath));
 			createFile(repositoryUrl);
 			builder.redirectErrorStream(true);
-			builder.redirectOutput(generateLogfile(repositoryUrl).toFile());
+			builder.redirectOutput(generateLogfilePath(repositoryUrl).toFile());
 			Process process = builder.start();
 			long start = System.nanoTime();
 			Integer exitCode = process.waitFor();
@@ -62,9 +63,13 @@ public class BuildChecker {
 		return;
 	}
 
+	/**
+	 * ログファイルを生成する
+	 * @param repositoryUrl リポジトリのURL
+	 */
 	public void createFile(String repositoryUrl) {
 		File logDirectory = new File(getLogfileDirectory());
-		File logFile = new File(generateLogfile(repositoryUrl).toString());
+		File logFile = new File(generateLogfilePath(repositoryUrl).toString());
 		try {
 			if (logDirectory.exists() == false) {
 				logDirectory.mkdirs();
@@ -78,7 +83,12 @@ public class BuildChecker {
 		return;
 	}
 
-	public Path generateLogfile(String repositoryUrl) {
+	/**
+	 * ログファイルのパスを生成する
+	 * @param repositoryUrl リポジトリのURL
+	 * @return ログファイルのパス 
+	 */
+	public Path generateLogfilePath(String repositoryUrl) {
 		Calendar calendar = Calendar.getInstance();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
 		// RepositoryController repositoryController = new RepositoryController(repositoryUrl);
@@ -93,6 +103,11 @@ public class BuildChecker {
 		return logFilePath;
 	}
 
+	/**
+	 * ログファイルを保存するディレクトリのパスを取得する
+	 * 
+	 * @return ログファイルを保存するディレクトリのパス
+	 */
 	public String getLogfileDirectory() {
 		return this.logFileDirectory;
 	}
