@@ -1,6 +1,7 @@
 package org.goodppy;
 
-import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -13,7 +14,7 @@ public class RepositoryController {
 	/**
 	 * クローン先のディレクトリのパス
 	 */
-	private String localPath;
+	private Path localPath;
 
 	/**
 	 * リポジトリのオーナー名
@@ -37,7 +38,7 @@ public class RepositoryController {
 		this.repositoryUrl = repositoryUrl;
 		this.owner = makeUrlParts()[makeUrlParts().length - 2];
 		this.repositoryName = makeUrlParts()[makeUrlParts().length - 1].replace(".git", "");
-		this.localPath = "./repositories/" + getOwner() + "/" + getRepositoryName(); // ./repositories/owner/repositoryName
+		this.localPath = Paths.get("./repositories/" + getOwner() + "/" + getRepositoryName()); // ./repositories/owner/repositoryName
 
 		return;
 	}
@@ -47,7 +48,7 @@ public class RepositoryController {
 	 * 
 	 * @return クローン先のディレクトリのパス
 	 */
-	public String getLocalPath() {
+	public Path getLocalPath() {
 		return this.localPath;
 	}
 
@@ -83,10 +84,15 @@ public class RepositoryController {
 	 */
 	public void gitClone() {
 		try {
+			if (getLocalPath().toFile().exists() == true) {
+				System.out.println("This repository is already clone.");
+
+				return;
+			}
 			System.out.println("Repository is being cloned...");
 			Git.cloneRepository()
 					.setURI(getRepositoryUrl())
-					.setDirectory(new File(getLocalPath()))
+					.setDirectory(getLocalPath().toFile())
 					.call();
 			System.out.println("Repository has been cloned.");
 		} catch (GitAPIException e) {
