@@ -32,15 +32,15 @@ public class BuildChecker {
 	/**
 	 * ビルドが行えるかをチェックする
 	 * 
-	 * @param localPath クローン先のディレクトリのパス
+	 * @param localPath     クローン先のディレクトリのパス
 	 * @param repositoryUrl リポジトリのURL
 	 */
-	public void buildCheck(String localPath, String repositoryUrl) {
+	public void buildCheck(Path localPath, String repositoryUrl) {
 		try {
 			System.out.println("Start the build...");
 			ProcessBuilder builder = new ProcessBuilder();
 			builder.command("gradle", "build"); // Gradleのビルドを行う
-			builder.directory(new File(localPath));
+			builder.directory(localPath.toFile());
 			createFile(repositoryUrl);
 			builder.redirectErrorStream(true);
 			builder.redirectOutput(generateLogfilePath(repositoryUrl).toFile());
@@ -65,6 +65,7 @@ public class BuildChecker {
 
 	/**
 	 * ログファイルを生成する
+	 * 
 	 * @param repositoryUrl リポジトリのURL
 	 */
 	public void createFile(String repositoryUrl) {
@@ -85,13 +86,15 @@ public class BuildChecker {
 
 	/**
 	 * ログファイルのパスを生成する
+	 * 
 	 * @param repositoryUrl リポジトリのURL
-	 * @return ログファイルのパス 
+	 * @return ログファイルのパス
 	 */
 	public Path generateLogfilePath(String repositoryUrl) {
 		Calendar calendar = Calendar.getInstance();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
-		// RepositoryController repositoryController = new RepositoryController(repositoryUrl);
+		// RepositoryController repositoryController = new
+		// RepositoryController(repositoryUrl);
 		String logFile = getLogfileDirectory()
 				// + repositoryController.getOwner()
 				// + "_"
