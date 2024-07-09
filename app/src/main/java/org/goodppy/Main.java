@@ -14,7 +14,6 @@ public class Main {
 	 * @param args コマンドライン引数
 	 */
 	public static void main(String[] args) {
-		// String logfile = "../log.txt";
 		String repositoriesList = "./src/main/resource/repositories.txt";
 		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(repositoriesList))) {
 			String repositoryUrl;
@@ -24,7 +23,9 @@ public class Main {
 				RepositoryController repositoryController = new RepositoryController(repositoryUrl);
 				repositoryController.gitClone();
 				BuildChecker buildChecker = new BuildChecker(repositoryUrl);
-				buildChecker.buildCheck(repositoryController.getLocalPath(), repositoryUrl);
+				buildChecker.buildCheck(repositoryController.getLocalPath());
+				DependencyChecker dependencyChecker = new DependencyChecker(repositoryUrl);
+				dependencyChecker.dependencyCheck(repositoryController.getLocalPath());
 				System.out.printf("End the evaluation of %s\n", repositoryUrl);
 			}
 			System.out.println("----------------------------------------");

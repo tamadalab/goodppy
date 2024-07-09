@@ -18,15 +18,23 @@ public class BuildChecker {
 	private String logFileDirectory;
 
 	/**
+	 * リポジトリのURL
+	 */
+	private String repositoryUrl;
+
+	/**
 	 * コンストラクタ
 	 */
 	public BuildChecker(String repositoryUrl) {
 		RepositoryController repositoryController = new RepositoryController(repositoryUrl);
-		this.logFileDirectory = "./logs/"
+		this.logFileDirectory = "./logs/build/"
 				+ repositoryController.getOwner()
 				+ "/"
 				+ repositoryController.getRepositoryName()
 				+ "/";
+		this.repositoryUrl = repositoryUrl;
+
+		return;
 	}
 
 	/**
@@ -35,27 +43,27 @@ public class BuildChecker {
 	 * @param localPath     クローン先のディレクトリのパス
 	 * @param repositoryUrl リポジトリのURL
 	 */
-	public void buildCheck(Path localPath, String repositoryUrl) {
+	public void buildCheck(Path localPath) {
 		try {
 			System.out.println("Start the build...");
 			ProcessBuilder builder = new ProcessBuilder();
 			builder.command("gradle", "build"); // Gradleのビルドを行う
 			builder.directory(localPath.toFile());
-			createFile(repositoryUrl);
+			createFile();
 			builder.redirectErrorStream(true);
-			builder.redirectOutput(generateLogfilePath(repositoryUrl).toFile());
+			builder.redirectOutput(generateLogfilePath().toFile());
 			Process process = builder.start();
 			long start = System.nanoTime();
 			Integer exitCode = process.waitFor();
 			if (exitCode != 0) {
 				System.out.println("Build failed");
 				long end = System.nanoTime();
-				System.out.println("Time taken to build : " + (end - start) + "ns");
+				System.out.println("Time taked to build : " + (end - start) + "ns");
 				return;
 			}
 			System.out.println("Build success");
 			long end = System.nanoTime();
-			System.out.println("Time taken to build : " + (end - start) + "ns");
+			System.out.println("Time taked to build : " + (end - start) + "ns");
 		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -65,12 +73,10 @@ public class BuildChecker {
 
 	/**
 	 * ログファイルを生成する
-	 * 
-	 * @param repositoryUrl リポジトリのURL
 	 */
-	public void createFile(String repositoryUrl) {
+	public void createFile() {
 		File logDirectory = new File(getLogfileDirectory());
-		File logFile = new File(generateLogfilePath(repositoryUrl).toString());
+		File logFile = new File(generateLogfilePath().toString());
 		try {
 			if (logDirectory.exists() == false) {
 				logDirectory.mkdirs();
@@ -87,14 +93,12 @@ public class BuildChecker {
 	/**
 	 * ログファイルのパスを生成する
 	 * 
-	 * @param repositoryUrl リポジトリのURL
 	 * @return ログファイルのパス
 	 */
-	public Path generateLogfilePath(String repositoryUrl) {
+	public Path generateLogfilePath() {
 		Calendar calendar = Calendar.getInstance();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
-		// RepositoryController repositoryController = new
-		// RepositoryController(repositoryUrl);
+		// RepositoryController repositoryController = new RepositoryController(getRepositoryUrl());
 		String logFile = getLogfileDirectory()
 				// + repositoryController.getOwner()
 				// + "_"
@@ -113,5 +117,14 @@ public class BuildChecker {
 	 */
 	public String getLogfileDirectory() {
 		return this.logFileDirectory;
+	}
+
+	/**
+	 * リポジトリのURLを取得する
+	 * 
+	 * @return リポジトリのURL
+	 */
+	public String getRepositoryUrl() {
+		return this.repositoryUrl;
 	}
 }

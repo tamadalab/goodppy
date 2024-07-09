@@ -6,5 +6,7 @@ package org.goodppy;
 public class ContainerChecker {
 	public ContainerChecker() {
 		// コンストラクタ
+
+		return;
 	}
 }
