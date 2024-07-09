@@ -6,5 +6,7 @@ package org.goodppy;
 public class Evaluate {
 	public Evaluate() {
 		// コンストラクタ
+
+		return;
 	}
 }
