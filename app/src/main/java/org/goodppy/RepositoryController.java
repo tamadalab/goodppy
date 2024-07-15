@@ -33,6 +33,8 @@ public class RepositoryController {
 
 	/**
 	 * コンストラクタ
+	 * 
+	 * @param repositoryUrl リポジトリのURL
 	 */
 	public RepositoryController(String repositoryUrl) {
 		this.repositoryUrl = repositoryUrl;
