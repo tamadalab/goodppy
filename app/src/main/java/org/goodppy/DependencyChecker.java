@@ -27,14 +27,25 @@ public class DependencyChecker {
 	 */
 	private String repositoryUrl;
 
+	/**
+	 * 評価するリポジトリについて操作を行う
+	 */
+	private RepositoryController repositoryController;
+
+	/**
+	 * コンストラクタ
+	 * 
+	 * @param repositoryUrl リポジトリのURL
+	 */
 	public DependencyChecker(String repositoryUrl) {
-		RepositoryController repositoryController = new RepositoryController(repositoryUrl);
+		this.repositoryController = new RepositoryController(repositoryUrl);
+		// ./logs/dependency/owner/repositoryName/
 		this.logFileDirectory = "./logs/dependency/"
-				+ repositoryController.getOwner()
+				+ this.repositoryController.getOwner()
 				+ "/"
-				+ repositoryController.getRepositoryName()
+				+ this.repositoryController.getRepositoryName()
 				+ "/";
-		this.repositoryName = repositoryController.getRepositoryName();
+		this.repositoryName = this.repositoryController.getRepositoryName();
 		this.repositoryUrl = repositoryUrl;
 
 		return;
@@ -47,9 +58,10 @@ public class DependencyChecker {
 		try {
 			System.out.println("Start check dependencies...");
 			ProcessBuilder builder = new ProcessBuilder();
-			// builder.command("./gradlew", "dependencyCheckAnalyze"); // 依存関係を調べる
-			builder.command("./dependency-check.sh", "--project", getRepositoryName(), "--scan", localPath.toString()); // 依存関係を調べる
-			// builder.directory(localPath.toFile());
+			builder.command("./src/main/resource/dependency-check/bin/dependency-check.sh",
+					"--project", getRepositoryName(),
+					"--scan", localPath.toString(),
+					"--format", "CSV"); // 依存関係を調べる
 			builder.directory(new File("./"));
 			createFile();
 			builder.redirectErrorStream(true);
@@ -58,7 +70,7 @@ public class DependencyChecker {
 			long start = System.nanoTime();
 			Integer exitCode = process.waitFor();
 			if (exitCode != 0) {
-				System.out.println(" Faild");
+				System.out.println("Faild");
 				long end = System.nanoTime();
 				System.out.println("Time taked to check dependencies : " + (end - start) + "ns");
 				return;
@@ -100,12 +112,10 @@ public class DependencyChecker {
 	public Path generateLogfilePath() {
 		Calendar calendar = Calendar.getInstance();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
-		// RepositoryController repositoryController = new
-		// RepositoryController(getRepositoryUrl());
 		String logFile = getLogfileDirectory()
-				// + repositoryController.getOwner()
+				// + this.repositoryController.getOwner()
 				// + "_"
-				// + repositoryController.getRepositoryName()
+				// + this.repositoryController.getRepositoryName()
 				// + "_"
 				+ sdf.format(calendar.getTime())
 				+ ".log";
@@ -139,5 +149,4 @@ public class DependencyChecker {
 	public String getRepositoryUrl() {
 		return this.repositoryUrl;
 	}
-
 }

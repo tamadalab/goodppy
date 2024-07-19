@@ -23,14 +23,22 @@ public class BuildChecker {
 	private String repositoryUrl;
 
 	/**
+	 * 評価するリポジトリについて操作を行う
+	 */
+	private RepositoryController repositoryController;
+
+	/**
 	 * コンストラクタ
+	 *
+	 * @param repositoryUrl リポジトリのURL
 	 */
 	public BuildChecker(String repositoryUrl) {
-		RepositoryController repositoryController = new RepositoryController(repositoryUrl);
+		this.repositoryController = new RepositoryController(repositoryUrl);
+		// ./logs/build/owner/repositoryName/
 		this.logFileDirectory = "./logs/build/"
-				+ repositoryController.getOwner()
+				+ this.repositoryController.getOwner()
 				+ "/"
-				+ repositoryController.getRepositoryName()
+				+ this.repositoryController.getRepositoryName()
 				+ "/";
 		this.repositoryUrl = repositoryUrl;
 
@@ -98,15 +106,15 @@ public class BuildChecker {
 	public Path generateLogfilePath() {
 		Calendar calendar = Calendar.getInstance();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
-		// RepositoryController repositoryController = new RepositoryController(getRepositoryUrl());
 		String logFile = getLogfileDirectory()
-				// + repositoryController.getOwner()
+				// + this.repositoryController.getOwner()
 				// + "_"
-				// + repositoryController.getRepositoryName()
+				// + this.repositoryController.getRepositoryName()
 				// + "_"
 				+ sdf.format(calendar.getTime())
 				+ ".log";
 		Path logFilePath = Paths.get(logFile);
+
 		return logFilePath;
 	}
 
