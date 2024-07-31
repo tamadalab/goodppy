@@ -40,7 +40,7 @@ public class RepositoryController {
 		this.repositoryUrl = repositoryUrl;
 		this.owner = makeUrlParts()[makeUrlParts().length - 2];
 		this.repositoryName = makeUrlParts()[makeUrlParts().length - 1].replace(".git", "");
-		this.localPath = Paths.get("./repositories/" + getOwner() + "/" + getRepositoryName()); // ./repositories/owner/repositoryName
+		this.localPath = Paths.get("./repositories/" + ownerAndRepositoryName()); // ./repositories/owner/repositoryName
 
 		return;
 	}
@@ -114,6 +114,10 @@ public class RepositoryController {
 		String[] urlParts = getRepositoryUrl().split("/");
 
 		return urlParts;
+	}
+
+	public String ownerAndRepositoryName() {
+		return getOwner() + "/" + getRepositoryName() + "/";
 	}
 
 	// public void setLocalPath(String localPath) {

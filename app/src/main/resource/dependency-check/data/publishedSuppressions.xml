@@ -1731,4 +1731,25 @@ only pkg:maven/org.clojure:clojure@.* is the CPE cpe:/a:clojure:clojure
    <packageUrl regex="true">^pkg:maven/org\.eclipse\.jetty/jetty-openid@.*$</packageUrl>
    <cpe>cpe:/a:openid:openid</cpe>
 </suppress>
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #6858
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring-security-oauth2-resource-server@.*$</packageUrl>
+   <cpe>cpe:/a:vmware:server</cpe>
+</suppress>
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #6856
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring-security-oauth2-authorization-server@.*$</packageUrl>
+   <cpe>cpe:/a:oauth2-server_project:oauth2-server</cpe>
+</suppress>
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #6855
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/commons-validator/commons-validator@.*$</packageUrl>
+   <cpe>cpe:/a:validator_project:validator</cpe>
+</suppress>
 </suppressions>

@@ -36,10 +36,7 @@ public class BuildChecker {
 		this.repositoryController = new RepositoryController(repositoryUrl);
 		// ./logs/build/owner/repositoryName/
 		this.logFileDirectory = "./logs/build/"
-				+ this.repositoryController.getOwner()
-				+ "/"
-				+ this.repositoryController.getRepositoryName()
-				+ "/";
+				+ this.repositoryController.ownerAndRepositoryName();
 		this.repositoryUrl = repositoryUrl;
 
 		return;
