@@ -12,6 +12,8 @@ import java.util.Calendar;
  */
 public class DependencyChecker {
 
+	private String apiKey;
+
 	/**
 	 * ログファイルを保存するディレクトリのパス
 	 */
@@ -38,13 +40,10 @@ public class DependencyChecker {
 	 * @param repositoryUrl リポジトリのURL
 	 */
 	public DependencyChecker(String repositoryUrl) {
+		this.apiKey = "422f8e6a-c993-4428-a626-dacec5e8dcb5";
 		this.repositoryController = new RepositoryController(repositoryUrl);
 		// ./logs/dependency/owner/repositoryName/
-		this.logFileDirectory = "./logs/dependency/"
-				+ this.repositoryController.getOwner()
-				+ "/"
-				+ this.repositoryController.getRepositoryName()
-				+ "/";
+		this.logFileDirectory = "./logs/dependency/" + this.repositoryController.ownerAndRepositoryName();
 		this.repositoryName = this.repositoryController.getRepositoryName();
 		this.repositoryUrl = repositoryUrl;
 
@@ -59,10 +58,12 @@ public class DependencyChecker {
 			System.out.println("Start check dependencies...");
 			ProcessBuilder builder = new ProcessBuilder();
 			builder.command("./src/main/resource/dependency-check/bin/dependency-check.sh",
+					"--nvdApiKey", getApiKey(),
 					"--project", getRepositoryName(),
 					"--scan", localPath.toString(),
+					"--out", "./dependency_reports/" + this.repositoryController.ownerAndRepositoryName(),
 					"--format", "CSV"); // 依存関係を調べる
-			builder.directory(new File("./"));
+			builder.directory(new File("."));
 			createFile();
 			builder.redirectErrorStream(true);
 			builder.redirectOutput(generateLogfilePath().toFile());
@@ -121,6 +122,10 @@ public class DependencyChecker {
 				+ ".log";
 		Path logFilePath = Paths.get(logFile);
 		return logFilePath;
+	}
+
+	public String getApiKey() {
+		return this.apiKey;
 	}
 
 	/**
