@@ -74,6 +74,7 @@ public class DependencyChecker {
 				System.out.println("Faild");
 				long end = System.nanoTime();
 				System.out.println("Time taked to check dependencies : " + (end - start) + "ns");
+
 				return;
 			}
 			System.out.println("Success");
@@ -121,6 +122,7 @@ public class DependencyChecker {
 				+ sdf.format(calendar.getTime())
 				+ ".log";
 		Path logFilePath = Paths.get(logFile);
+		
 		return logFilePath;
 	}
 
