@@ -46,7 +46,8 @@ public class CsvController {
 	}
 
 	/**
-	 * CSVを読み込む
+	 * csvファイルを読み込んで、脆弱性のある依存関係を返す
+	 * @return 脆弱性のある依存関係
 	 */
 	public Map<String, List<String>> readCsv() {
 		Path csvFilePath = Paths.get(getCsvFilePathString());
