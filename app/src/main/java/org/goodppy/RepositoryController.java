@@ -1,5 +1,7 @@
 package org.goodppy;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -88,6 +90,13 @@ public class RepositoryController {
 		try {
 			if (getLocalPath().toFile().exists() == true) {
 				System.out.println("This repository is already clone.");
+				System.out.println("This repository is deleting now...");
+				try {
+					Files.delete(getLocalPath());
+					System.out.println("This repository has been deleted.");
+				} catch (IOException e) {
+					e.getStackTrace();
+				}
 
 				return;
 			}

@@ -64,6 +64,7 @@ public class BuildChecker {
 				System.out.println("Build failed");
 				long end = System.nanoTime();
 				System.out.println("Time taked to build : " + (end - start) + "ns");
+				
 				return;
 			}
 			System.out.println("Build success");
