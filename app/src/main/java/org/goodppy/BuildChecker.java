@@ -50,26 +50,34 @@ public class BuildChecker {
 	 */
 	public void buildCheck(Path localPath) {
 		try {
-			System.out.println("Start the build...");
-			ProcessBuilder builder = new ProcessBuilder();
-			builder.command("gradle", "build"); // Gradleのビルドを行う
-			builder.directory(localPath.toFile());
-			createFile();
-			builder.redirectErrorStream(true);
-			builder.redirectOutput(generateLogfilePath().toFile());
-			Process process = builder.start();
-			long start = System.nanoTime();
-			Integer exitCode = process.waitFor();
-			if (exitCode != 0) {
-				System.out.println("Build failed");
+			// ProcessBuilder builder = new ProcessBuilder();
+			// builder.command("gradle", "build"); // Gradleのビルドを行う
+			// builder.directory(localPath.toFile());
+			String[] javaLTS = { "8", "11", "17", "21" };
+			for (int i = 0; i < javaLTS.length; i++) {
+				String dockerfilePath = "./dockerfiles/java" + javaLTS[i];
+				ProcessBuilder builder = new ProcessBuilder();
+				builder.command("docker", "build", "-t", "buildtest", dockerfilePath);
+				System.out.println("Start the build...");
+				builder.command("docker", "run", "-v", localPath.toString() + ":/app", "buildtest");
+				builder.directory(new File("."));
+				createFile();
+				builder.redirectErrorStream(true);
+				builder.redirectOutput(generateLogfilePath().toFile());
+				Process process = builder.start();
+				long start = System.nanoTime();
+				Integer exitCode = process.waitFor();
+				if (exitCode != 0) {
+					System.out.println("Build failed");
+					long end = System.nanoTime();
+					System.out.println("Time taked to build : " + (end - start) + "ns");
+
+					return;
+				}
+				System.out.println("Build success");
 				long end = System.nanoTime();
 				System.out.println("Time taked to build : " + (end - start) + "ns");
-				
-				return;
 			}
-			System.out.println("Build success");
-			long end = System.nanoTime();
-			System.out.println("Time taked to build : " + (end - start) + "ns");
 		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
 		}

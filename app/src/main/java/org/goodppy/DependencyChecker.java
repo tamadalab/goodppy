@@ -6,12 +6,19 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Map;
+
+import com.google.common.collect.Multimap;
 
 /**
  * ライブラリの依存関係をチェックするクラス
  */
 public class DependencyChecker {
 
+	/**
+	 * NVD APIキー
+	 */
 	private String apiKey;
 
 	/**
@@ -48,6 +55,44 @@ public class DependencyChecker {
 		this.repositoryUrl = repositoryUrl;
 
 		return;
+	}
+
+	/**
+	 * ログファイルを生成する
+	 */
+	public void createFile() {
+		File logDirectory = new File(getLogfileDirectory());
+		File logFile = new File(generateLogfilePath().toString());
+		try {
+			if (logDirectory.exists() == false) {
+				logDirectory.mkdirs();
+			}
+			if (logFile.exists() == false)
+				logFile.createNewFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return;
+	}
+
+	/**
+	 * レポートから得たデータを処理する
+	 */
+	public Integer[] csvDataControl() {
+		CsvController csvController = new CsvController(getRepositoryUrl());
+		Multimap<String, List<String>> dependencies = csvController.readCsv();
+		Integer[] scores = { 0, 0, 0, 0, 0 };
+		for(Map.Entry<String, List<String>> entry : dependencies.entries()){
+			// String key = entry.getKey();
+			// String dependencyName = key;
+			// String vulnerability = entry.getValue().get(0);
+			String baseSeverity = entry.getValue().get(1);
+			// String baseScore = entry.getValue().get(2);
+			scores = markDependency(baseSeverity, scores);
+		}
+
+		return scores;
 	}
 
 	/**
@@ -88,22 +133,33 @@ public class DependencyChecker {
 	}
 
 	/**
-	 * ログファイルを生成する
+	 * 依存関係について評価する
+	 * 
+	 * @param baseSeverity 脆弱性の深刻度
+	 * @param scores       スコア
+	 * @return スコア
 	 */
-	public void createFile() {
-		File logDirectory = new File(getLogfileDirectory());
-		File logFile = new File(generateLogfilePath().toString());
-		try {
-			if (logDirectory.exists() == false) {
-				logDirectory.mkdirs();
+	public Integer[] markDependency(String baseSeverity, Integer[] scores) {
+		switch (baseSeverity) {
+			case "CRITICAL" -> {
+				scores[0] += 4;
 			}
-			if (logFile.exists() == false)
-				logFile.createNewFile();
-		} catch (IOException e) {
-			e.printStackTrace();
+			case "HIGH" -> {
+				scores[1] += 3;
+			}
+			case "MEDIUM" -> {
+				scores[2] += 2;
+			}
+			case "LOW" -> {
+				scores[3] += 1;
+			}
+			default -> {
+				
+			}
 		}
+		scores[4]++;
 
-		return;
+		return scores;
 	}
 
 	/**
@@ -122,7 +178,7 @@ public class DependencyChecker {
 				+ sdf.format(calendar.getTime())
 				+ ".log";
 		Path logFilePath = Paths.get(logFile);
-		
+
 		return logFilePath;
 	}
 

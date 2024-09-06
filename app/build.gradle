@@ -27,6 +27,9 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.eclipse.jgit/org.eclipse.jgit
 	implementation group: 'org.eclipse.jgit', name: 'org.eclipse.jgit', version: '5.13.3.202401111512-r'
 
+	// https://mvnrepository.com/artifact/com.opencsv/opencsv
+	implementation group: 'com.opencsv', name: 'opencsv', version: '5.9'
+
 	// implementation 'org.slf4j:slf4j-api:1.7.30'
 	// implementation 'org.slf4j:slf4j-log4j12:1.7.30'
 }

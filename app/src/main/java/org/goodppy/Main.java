@@ -26,13 +26,14 @@ public class Main {
 				buildChecker.buildCheck(repositoryController.getLocalPath());
 				DependencyChecker dependencyChecker = new DependencyChecker(repositoryUrl);
 				dependencyChecker.dependencyCheck(repositoryController.getLocalPath());
+				Evaluate evaluate = new Evaluate(repositoryUrl);
+				evaluate.evaluateDependency();
 				System.out.printf("End the evaluation of %s\n", repositoryUrl);
 			}
 			System.out.println("----------------------------------------");
 			System.out.println("End the evaluation of all repositories");
 		} catch (IOException e) {
 			e.printStackTrace();
-
 		}
 
 		return;
