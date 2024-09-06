@@ -1644,7 +1644,7 @@ only pkg:maven/org.clojure:clojure@.* is the CPE cpe:/a:clojure:clojure
    FP per issue #6695
    ]]></notes>
    <packageUrl regex="true">^pkg:maven/org\.apache\.logging\.log4j/log4j-slf4j2-impl@.*$</packageUrl>
-   <cpe>cpe:/a:apache:log4j</cpe>
+   <cpe>cpe:/a:log4js_project:log4js</cpe>
 </suppress>
 <suppress base="true">
    <notes><![CDATA[
@@ -1751,5 +1751,97 @@ only pkg:maven/org.clojure:clojure@.* is the CPE cpe:/a:clojure:clojure
    ]]></notes>
    <packageUrl regex="true">^pkg:maven/commons-validator/commons-validator@.*$</packageUrl>
    <cpe>cpe:/a:validator_project:validator</cpe>
+</suppress>
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #6886
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/io\.pivotal\.cfenv/java-cfenv-boot@.*$</packageUrl>
+   <cpe>cpe:/a:vmware:spring_boot</cpe>
+</suppress>
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #6906
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/org\.jeecgframework/autopoi-web@.*$</packageUrl>
+   <cpe>cpe:/a:web_project:web</cpe>
+</suppress>
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #6901
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/com\.yahoo\.datasketches/sketches-core@.*$</packageUrl>
+   <cpe>cpe:/a:sketch:sketch</cpe>
+</suppress>
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #6874
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/org\.springframework\.boot/spring-boot-starter-cache@.*$</packageUrl>
+   <cpe>cpe:/a:cache_project:cache</cpe>
+</suppress>
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #6873
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/javax\.cache/cache-api@.*$</packageUrl>
+   <cpe>cpe:/a:cache_project:cache</cpe>
+</suppress>
+
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #6838
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/com\.azure/azure-core-http-netty@.*$</packageUrl>
+   <cpe>cpe:/a:microsoft:azure_cli</cpe>
+</suppress>
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #6837
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/com\.azure/azure-core@.*$</packageUrl>
+   <cpe>cpe:/a:microsoft:azure_cli</cpe>
+</suppress>
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #6925
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/org\.tukaani/xz@.*$</packageUrl>
+   <cpe>cpe:/a:tukaani:xz</cpe>
+</suppress>
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #6926
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/org\.bouncycastle/bc(pg)?-fips@.*$</packageUrl>
+   <cpe>cpe:/a:bouncycastle:legion-of-the-bouncy-castle</cpe>
+</suppress>
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #6854
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/org\.bouncycastle/bc(pg)?-fips@.*$</packageUrl>
+   <cpe>cpe:/a:bouncycastle:bouncy_castle_for_java</cpe>
+</suppress>
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #6839
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/commons-discovery/commons-discovery@.*$</packageUrl>
+   <cpe>cpe:/a:spirit-project:spirit</cpe>
+</suppress>
+<suppress base="true">
+   <notes><![CDATA[
+   cpe:/a:services_project:services is Drupal services module in PHP #6448
+   ]]></notes>
+   <filePath regex="true">.*(\.(dll|jar|ear|war|pom|nupkg|nuspec|aar)|pom\.xml|package.json|packages.config)$</filePath>
+   <cpe>cpe:/a:services_project:services</cpe>
+</suppress>
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #6851
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/io\.github\.reactivecircus\.cache4k/cache4k-jvm@.*$</packageUrl>
+   <cpe>cpe:/a:cache_project:cache</cpe>
 </suppress>
 </suppressions>

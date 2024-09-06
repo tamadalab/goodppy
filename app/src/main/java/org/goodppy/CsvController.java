@@ -1,15 +1,14 @@
 package org.goodppy;
 
-import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
+import com.opencsv.CSVReader;
 
 /**
  * CSVの操作に関するクラス
@@ -21,6 +20,11 @@ public class CsvController {
 	private String csvFilePathString;
 
 	/**
+	 * 脆弱性のある依存関係を保持するもの
+	 */
+	private Multimap<String, List<String>> dependencies;
+
+	/**
 	 * 評価するリポジトリについて操作を行う
 	 */
 	private RepositoryController repositoryController;
@@ -28,7 +32,10 @@ public class CsvController {
 	/**
 	 * コンストラクタ
 	 */
-	public CsvController() {
+	public CsvController(String repositoryUrl) {
+		// this.dependencies = new LinkedHashMap<>();
+		this.dependencies = ArrayListMultimap.create();
+		this.repositoryController = new RepositoryController(repositoryUrl);
 		this.csvFilePathString = "./dependency_reports/"
 				+ this.repositoryController.ownerAndRepositoryName()
 				+ "/dependency-check-report.csv";
@@ -46,28 +53,36 @@ public class CsvController {
 	}
 
 	/**
+	 * Mapに依存関係に関する情報を追加する
+	 * 
+	 * @param dependencyName 脆弱性のあるライブラリ名
+	 * @param dependencyData 脆弱性に関する情報
+	 */
+	public void putDependencies(String dependencyName, List<String> dependencyData) {
+		this.dependencies.put(dependencyName, dependencyData);
+	}
+
+	/**
 	 * csvファイルを読み込んで、脆弱性のある依存関係を返す
+	 * 
 	 * @return 脆弱性のある依存関係
 	 */
-	public Map<String, List<String>> readCsv() {
+	public Multimap<String, List<String>> readCsv() {
 		Path csvFilePath = Paths.get(getCsvFilePathString());
-		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(csvFilePath.toFile()))) {
-			String line;
-			String dependencyName;
-			List<String> data;
-			List<String> dependencyData = new ArrayList<String>();
-			Map<String, List<String>> dependencies = new HashMap<>();
-			while ((line = bufferedReader.readLine()) != null) {
-				data = new ArrayList<String>(Arrays.asList(line.split(",")));
-				dependencyName = data.get(2);
-				dependencyData.add(data.get(12));
-				dependencyData.add(data.get(17));
-				dependencyData.add(data.get(18));
-				dependencies.put(dependencyName, dependencyData);
-			}
+		try (CSVReader csvReader = new CSVReader(new FileReader(csvFilePath.toFile()))) {
+			csvReader.readNext();
+			List<String[]> data = csvReader.readAll();
+			data.forEach((line) -> {
+				List<String> dependencyData = new ArrayList<String>();
+				String dependencyName = line[2];// 脆弱性のあるライブラリ名
+				dependencyData.add(line[12]);// 脆弱性の内容
+				dependencyData.add(line[17]);// 脆弱性の深刻度
+				dependencyData.add(line[18]);// 脆弱性のスコア
+				putDependencies(dependencyName, dependencyData);
+			});
 
-			return dependencies;
-		} catch (IOException e) {
+			return this.dependencies;
+		} catch (Exception e) {
 			e.printStackTrace();
 
 			return null;
