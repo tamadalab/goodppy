@@ -50,20 +50,17 @@ public class BuildChecker {
 	 */
 	public void buildCheck(Path localPath) {
 		try {
-			// ProcessBuilder builder = new ProcessBuilder();
-			// builder.command("gradle", "build"); // Gradleのビルドを行う
-			// builder.directory(localPath.toFile());
 			String[] javaLTS = { "8", "11", "17", "21" };
 			for (int i = 0; i < javaLTS.length; i++) {
-				String dockerfilePath = "./dockerfiles/java" + javaLTS[i];
+				// String dockerfilePath = "./dockerfiles/java" + javaLTS[i];
 				ProcessBuilder builder = new ProcessBuilder();
-				builder.command("docker", "build", "-t", "buildtest", dockerfilePath);
 				System.out.println("Start the build...");
-				builder.command("docker", "run", "-v", localPath.toString() + ":/app", "buildtest");
-				builder.directory(new File("."));
+				builder.command("docker", "run", "-v", localPath.toString() + ":/app", "buildtest:java" + javaLTS[i]);
+				builder.directory(new File("./"));
 				createFile();
 				builder.redirectErrorStream(true);
-				builder.redirectOutput(generateLogfilePath().toFile());
+				Path logfile = Paths.get(generateLogfilePath(javaLTS[i]).toString());
+				builder.redirectOutput(logfile.toFile());
 				Process process = builder.start();
 				long start = System.nanoTime();
 				Integer exitCode = process.waitFor();
@@ -72,7 +69,7 @@ public class BuildChecker {
 					long end = System.nanoTime();
 					System.out.println("Time taked to build : " + (end - start) + "ns");
 
-					return;
+					continue;
 				}
 				System.out.println("Build success");
 				long end = System.nanoTime();
@@ -90,16 +87,16 @@ public class BuildChecker {
 	 */
 	public void createFile() {
 		File logDirectory = new File(getLogfileDirectory());
-		File logFile = new File(generateLogfilePath().toString());
-		try {
-			if (logDirectory.exists() == false) {
-				logDirectory.mkdirs();
-			}
-			if (logFile.exists() == false)
-				logFile.createNewFile();
-		} catch (IOException e) {
-			e.printStackTrace();
+		// File logFile = new File(generateLogfilePath().toString());
+		// try {
+		if (logDirectory.exists() == false) {
+			logDirectory.mkdirs();
 		}
+		// if (logFile.exists() == false)
+		// logFile.createNewFile();
+		// } catch (IOException e) {
+		// e.printStackTrace();
+		// }
 
 		return;
 	}
@@ -109,7 +106,7 @@ public class BuildChecker {
 	 * 
 	 * @return ログファイルのパス
 	 */
-	public Path generateLogfilePath() {
+	public Path generateLogfilePath(String javaLTS) {
 		Calendar calendar = Calendar.getInstance();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
 		String logFile = getLogfileDirectory()
@@ -117,6 +114,9 @@ public class BuildChecker {
 				// + "_"
 				// + this.repositoryController.getRepositoryName()
 				// + "_"
+				+ "java"
+				+ javaLTS
+				+ "_"
 				+ sdf.format(calendar.getTime())
 				+ ".log";
 		Path logFilePath = Paths.get(logFile);

@@ -27,7 +27,9 @@ public class Evaluate {
 		for (int i = 0; i < scores.length - 1; i++) {
 			score += scores[i];
 		}
-		score /= scores[4];
+		if (scores[4] != 0) {
+			score /= scores[4];
+		}
 		System.out.printf("score: %d\ncritical: %d high %d medium: %d low: %d\n", score, critical, high, medium, low);
 		return;
 	}
