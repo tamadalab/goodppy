@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * ビルドが正しく行えるかをチェックするクラス
@@ -21,6 +23,8 @@ public class BuildChecker {
 	 * リポジトリのURL
 	 */
 	private String repositoryUrl;
+
+	List<String> result = new ArrayList<String>();
 
 	/**
 	 * 評価するリポジトリについて操作を行う
@@ -48,14 +52,18 @@ public class BuildChecker {
 	 * @param localPath     クローン先のディレクトリのパス
 	 * @param repositoryUrl リポジトリのURL
 	 */
-	public void buildCheck(Path localPath) {
+	public List<String> buildCheck(Path localPath) {
+		// Evaluate evaluate = new Evaluate(getRepositoryUrl());
+		String failed = "failed";
+		String successful = "successful";
+		List<String> result = new ArrayList<String>();
 		try {
 			String[] javaLTS = { "8", "11", "17", "21" };
 			for (int i = 0; i < javaLTS.length; i++) {
-				// String dockerfilePath = "./dockerfiles/java" + javaLTS[i];
 				ProcessBuilder builder = new ProcessBuilder();
-				System.out.println("Start the build...");
-				builder.command("docker", "run", "-v", localPath.toString() + ":/app", "buildtest:java" + javaLTS[i]);
+				System.out.println("Start the build by java" + javaLTS[i] + "...");
+				builder.command("docker", "run", "--rm", "-v", localPath.toString() + ":/app",
+						"fussan0424/buildtest:java" + javaLTS[i]);
 				builder.directory(new File("./"));
 				createFile();
 				builder.redirectErrorStream(true);
@@ -65,21 +73,24 @@ public class BuildChecker {
 				long start = System.nanoTime();
 				Integer exitCode = process.waitFor();
 				if (exitCode != 0) {
-					System.out.println("Build failed");
+					System.out.println("Build failed by java" + javaLTS[i]);
 					long end = System.nanoTime();
 					System.out.println("Time taked to build : " + (end - start) + "ns");
+					result.add(failed);
 
 					continue;
 				}
-				System.out.println("Build success");
+				System.out.println("Build successful by java" + javaLTS[i]);
 				long end = System.nanoTime();
 				System.out.println("Time taked to build : " + (end - start) + "ns");
+				result.add(successful);
 			}
 		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
 		}
+		this.result = result;
 
-		return;
+		return this.result;
 	}
 
 	/**
@@ -87,16 +98,9 @@ public class BuildChecker {
 	 */
 	public void createFile() {
 		File logDirectory = new File(getLogfileDirectory());
-		// File logFile = new File(generateLogfilePath().toString());
-		// try {
 		if (logDirectory.exists() == false) {
 			logDirectory.mkdirs();
 		}
-		// if (logFile.exists() == false)
-		// logFile.createNewFile();
-		// } catch (IOException e) {
-		// e.printStackTrace();
-		// }
 
 		return;
 	}
@@ -141,4 +145,8 @@ public class BuildChecker {
 	public String getRepositoryUrl() {
 		return this.repositoryUrl;
 	}
+
+	// public List<String> getResult() {
+	// return this.result;
+	// }
 }

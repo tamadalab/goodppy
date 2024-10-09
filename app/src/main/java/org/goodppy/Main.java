@@ -3,6 +3,7 @@ package org.goodppy;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * メインクラス
@@ -23,11 +24,12 @@ public class Main {
 				RepositoryController repositoryController = new RepositoryController(repositoryUrl);
 				repositoryController.gitClone();
 				BuildChecker buildChecker = new BuildChecker(repositoryUrl);
-				buildChecker.buildCheck(repositoryController.getLocalPath());
+				List<String> buildResult = buildChecker.buildCheck(repositoryController.getLocalPath());
 				DependencyChecker dependencyChecker = new DependencyChecker(repositoryUrl);
 				dependencyChecker.dependencyCheck(repositoryController.getLocalPath());
 				Evaluate evaluate = new Evaluate(repositoryUrl);
 				evaluate.evaluateDependency();
+				evaluate.writeCsv(buildResult);
 				System.out.printf("End the evaluation of %s\n", repositoryUrl);
 			}
 			System.out.println("----------------------------------------");

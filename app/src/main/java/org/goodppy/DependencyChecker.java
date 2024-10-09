@@ -83,7 +83,7 @@ public class DependencyChecker {
 		CsvController csvController = new CsvController(getRepositoryUrl());
 		Multimap<String, List<String>> dependencies = csvController.readCsv();
 		Integer[] scores = { 0, 0, 0, 0, 0 };
-		for(Map.Entry<String, List<String>> entry : dependencies.entries()){
+		for (Map.Entry<String, List<String>> entry : dependencies.entries()) {
 			// String key = entry.getKey();
 			// String dependencyName = key;
 			// String vulnerability = entry.getValue().get(0);
@@ -154,7 +154,7 @@ public class DependencyChecker {
 				scores[3] += 1;
 			}
 			default -> {
-				
+
 			}
 		}
 		scores[4]++;
@@ -182,6 +182,11 @@ public class DependencyChecker {
 		return logFilePath;
 	}
 
+	/**
+	 * APIキーを取得する
+	 * 
+	 * @return APIキー
+	 */
 	public String getApiKey() {
 		return this.apiKey;
 	}
