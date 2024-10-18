@@ -31,6 +31,7 @@ public class CsvController {
 
 	/**
 	 * コンストラクタ
+	 * @param repositoryUrl リポジトリのURL
 	 */
 	public CsvController(String repositoryUrl) {
 		// this.dependencies = new LinkedHashMap<>();
@@ -60,6 +61,8 @@ public class CsvController {
 	 */
 	public void putDependencies(String dependencyName, List<String> dependencyData) {
 		this.dependencies.put(dependencyName, dependencyData);
+
+		return;
 	}
 
 	/**
@@ -84,8 +87,8 @@ public class CsvController {
 			return this.dependencies;
 		} catch (Exception e) {
 			e.printStackTrace();
-
-			return null;
 		}
+
+		return null;
 	}
 }

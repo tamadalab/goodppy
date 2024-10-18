@@ -27,6 +27,8 @@ public class Main {
 				List<String> buildResult = buildChecker.buildCheck(repositoryController.getLocalPath());
 				DependencyChecker dependencyChecker = new DependencyChecker(repositoryUrl);
 				dependencyChecker.dependencyCheck(repositoryController.getLocalPath());
+				GitHubDataController gitHubDataController = new GitHubDataController(repositoryUrl);
+				gitHubDataController.collectData();
 				Evaluate evaluate = new Evaluate(repositoryUrl);
 				evaluate.evaluateDependency();
 				evaluate.writeCsv(buildResult);

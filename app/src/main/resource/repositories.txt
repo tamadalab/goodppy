@@ -1,5 +1,1 @@
-https://github.com/spring-projects/spring-boot.git
-https://github.com/elastic/elasticsearch.git
-https://github.com/ReactiveX/RxJava.git
-https://github.com/skylot/jadx.git
-https://github.com/Stirling-Tools/Stirling-PDF.git
+https://github.com/tamadalab/MarryLab.git

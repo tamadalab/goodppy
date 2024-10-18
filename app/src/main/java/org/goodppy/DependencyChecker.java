@@ -1,6 +1,8 @@
 package org.goodppy;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -47,7 +49,7 @@ public class DependencyChecker {
 	 * @param repositoryUrl リポジトリのURL
 	 */
 	public DependencyChecker(String repositoryUrl) {
-		this.apiKey = "422f8e6a-c993-4428-a626-dacec5e8dcb5";
+		this.apiKey = getApiKey();
 		this.repositoryController = new RepositoryController(repositoryUrl);
 		// ./logs/dependency/owner/repositoryName/
 		this.logFileDirectory = "./logs/dependency/" + this.repositoryController.ownerAndRepositoryName();
@@ -103,12 +105,12 @@ public class DependencyChecker {
 			System.out.println("Start check dependencies...");
 			ProcessBuilder builder = new ProcessBuilder();
 			builder.command("./src/main/resource/dependency-check/bin/dependency-check.sh",
-					"--nvdApiKey", getApiKey(),
+					"--nvdApiKey", this.apiKey,
 					"--project", getRepositoryName(),
 					"--scan", localPath.toString(),
 					"--out", "./dependency_reports/" + this.repositoryController.ownerAndRepositoryName(),
 					"--format", "CSV"); // 依存関係を調べる
-			builder.directory(new File("."));
+			builder.directory(new File("./"));
 			createFile();
 			builder.redirectErrorStream(true);
 			builder.redirectOutput(generateLogfilePath().toFile());
@@ -188,7 +190,18 @@ public class DependencyChecker {
 	 * @return APIキー
 	 */
 	public String getApiKey() {
-		return this.apiKey;
+		try {
+			String apiKey;
+			File file = new File("./src/resource/depndency-check_APIkey");
+			BufferedReader reader = new BufferedReader(new FileReader(file));
+			apiKey = reader.readLine();
+			reader.close();
+			return apiKey;
+		} catch (IOException e) {
+			e.printStackTrace();
+
+			return null;
+		}
 	}
 
 	/**

@@ -12,7 +12,14 @@ import com.opencsv.CSVWriter;
  * 評価を行うクラス
  */
 public class Evaluate {
-	private List<String> buildResult = new ArrayList<String>();;
+	/**
+	 * ビルドの結果リスト
+	 */
+	private List<String> buildResult = new ArrayList<String>();
+
+	/**
+	 * 依存関係の結果リスト
+	 */
 	private List<String> dependencyResult;
 
 	/**
@@ -88,10 +95,20 @@ public class Evaluate {
 		return this.repositoryUrl;
 	}
 
+	/**
+	 * ビルドの結果リストを取得する
+	 * 
+	 * @return ビルドの結果リスト
+	 */
 	public List<String> getBuildResult() {
 		return this.buildResult;
 	}
 
+	/**
+	 * CSVファイルに書き込む
+	 * 
+	 * @param buildResult ビルドの結果リスト
+	 */
 	public void writeCsv(List<String> buildResult) {
 		this.buildResult = buildResult;
 		String directoryFilePathString = "./result/"
@@ -116,5 +133,7 @@ public class Evaluate {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		return;
 	}
 }

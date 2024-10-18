@@ -24,6 +24,9 @@ public class BuildChecker {
 	 */
 	private String repositoryUrl;
 
+	/**
+	 * ビルドの結果
+	 */
 	List<String> result = new ArrayList<String>();
 
 	/**
@@ -145,8 +148,4 @@ public class BuildChecker {
 	public String getRepositoryUrl() {
 		return this.repositoryUrl;
 	}
-
-	// public List<String> getResult() {
-	// return this.result;
-	// }
 }

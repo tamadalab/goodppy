@@ -30,6 +30,10 @@ replay_pid*
 # Ignore Gradle build output directory
 build
 
+# Ignore API Key and token
+depndency-check_APIkey
+GitHub_API_token
+
 # Ignore clone repositories
 repositories/
 
@@ -38,3 +42,6 @@ dependency_reports/
 
 # Ignore result
 result/
+
+# Ignore GitHub Data
+GitHubData/
