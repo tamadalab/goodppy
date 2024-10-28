@@ -28,10 +28,12 @@ public class Main {
 				DependencyChecker dependencyChecker = new DependencyChecker(repositoryUrl);
 				dependencyChecker.dependencyCheck(repositoryController.getLocalPath());
 				GitHubDataController gitHubDataController = new GitHubDataController(repositoryUrl);
-				gitHubDataController.collectData();
-				Evaluate evaluate = new Evaluate(repositoryUrl);
-				evaluate.evaluateDependency();
-				evaluate.writeCsv(buildResult);
+				String[] gitHubDataList = gitHubDataController.collectData();
+				Scoring scoring = new Scoring(repositoryUrl);
+				double dependencyScore = scoring.evaluateDependency();
+				scoring.writeCsv(buildResult);
+				LogisticRegression logisticRegression = new LogisticRegression(repositoryUrl);
+				logisticRegression.analyze(dependencyScore, gitHubDataList);
 				System.out.printf("End the evaluation of %s\n", repositoryUrl);
 			}
 			System.out.println("----------------------------------------");

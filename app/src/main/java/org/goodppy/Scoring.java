@@ -9,9 +9,9 @@ import java.util.List;
 import com.opencsv.CSVWriter;
 
 /**
- * 評価を行うクラス
+ * スコアリングを行うクラス
  */
-public class Evaluate {
+public class Scoring {
 	/**
 	 * ビルドの結果リスト
 	 */
@@ -37,7 +37,7 @@ public class Evaluate {
 	 * 
 	 * @param repositoryUrl リポジトリのURL
 	 */
-	public Evaluate(String repositoryUrl) {
+	public Scoring(String repositoryUrl) {
 		this.repositoryController = new RepositoryController(repositoryUrl);
 		this.dependencyResult = new ArrayList<String>();
 		this.repositoryUrl = repositoryUrl;
@@ -59,7 +59,7 @@ public class Evaluate {
 	/**
 	 * 依存関係について評定する
 	 */
-	public void evaluateDependency() {
+	public Double evaluateDependency() {
 		DependencyChecker dependencyChecker = new DependencyChecker(getRepositoryUrl());
 		List<String> result = new ArrayList<String>();
 		Double score = 0.0;
@@ -83,7 +83,7 @@ public class Evaluate {
 		this.dependencyResult = result;
 		System.out.printf("score: %.1f\ncritical: %d high %d medium: %d low: %d\n", score, critical, high, medium, low);
 
-		return;
+		return score;
 	}
 
 	/**
@@ -118,8 +118,7 @@ public class Evaluate {
 				"dependencyScore", "critical", "high", "medium", "low" };
 		String[] data = { this.repositoryController.getOwner() + "/" + this.repositoryController.getRepositoryName(),
 				this.buildResult.get(0), this.buildResult.get(1), this.buildResult.get(2), this.buildResult.get(3),
-				this.dependencyResult.get(0), this.dependencyResult.get(1),
-				this.dependencyResult.get(2),
+				this.dependencyResult.get(0), this.dependencyResult.get(1),this.dependencyResult.get(2),
 				this.dependencyResult.get(3), this.dependencyResult.get(4)
 		};
 		File directoryFilePath = new File(directoryFilePathString);

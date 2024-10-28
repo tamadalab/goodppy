@@ -31,7 +31,7 @@ replay_pid*
 build
 
 # Ignore API Key and token
-depndency-check_APIkey
+dependency-check_APIkey
 GitHub_API_token
 
 # Ignore clone repositories

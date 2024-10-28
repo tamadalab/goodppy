@@ -192,7 +192,7 @@ public class DependencyChecker {
 	public String getApiKey() {
 		try {
 			String apiKey;
-			File file = new File("./src/resource/depndency-check_APIkey");
+			File file = new File("./src/main/resource/dependency-check_APIkey");
 			BufferedReader reader = new BufferedReader(new FileReader(file));
 			apiKey = reader.readLine();
 			reader.close();
@@ -200,7 +200,7 @@ public class DependencyChecker {
 		} catch (IOException e) {
 			e.printStackTrace();
 
-			return null;
+			return new String();
 		}
 	}
 

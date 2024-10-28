@@ -1557,9 +1557,9 @@
 </suppress>
 <suppress base="true">
    <notes><![CDATA[
-   FP per issue #6626
+   hand-curated better suppression for FP per issues #6626, #7015, #7019, #7020, #7021, #7022
    ]]></notes>
-   <packageUrl regex="true">^pkg:maven/org\.glassfish\.expressly/expressly@.*$</packageUrl>
+   <packageUrl regex="true">^pkg:maven/org\.glassfish(?!\.main).*$</packageUrl>
    <cpe>cpe:/a:eclipse:glassfish</cpe>
 </suppress>
 <suppress base="true">
@@ -1850,5 +1850,126 @@ only pkg:maven/org.clojure:clojure@.* is the CPE cpe:/a:clojure:clojure
    ]]></notes>
    <packageUrl regex="true">^pkg:maven/org\.jmdns/jmdns@.*$</packageUrl>
    <cpe>cpe:/a:openhab:openhab</cpe>
+</suppress>
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #6992
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/com\.azure/azure-identity@.*$</packageUrl>
+   <cpe>cpe:/a:microsoft:azure_cli</cpe>
+</suppress>
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #6991
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/com\.apollographql\.federation/federation-graphql-java-support@.*$</packageUrl>
+   <cpe>cpe:/a:apollo_project:apollo</cpe>
+</suppress>
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #7018
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/fi\.solita\.clamav/clamav-client@.*$</packageUrl>
+   <cpe>cpe:/a:clamav:clamav</cpe>
+</suppress>
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #7034
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/jakarta\.json/jakarta\.json-api@.*$</packageUrl>
+   <cpe>cpe:/a:eclipse:glassfish</cpe>
+</suppress>
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #7028
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/org\.glassfish\.jaxb/jaxb-runtime@.*$</packageUrl>
+   <cpe>cpe:/a:eclipse:glassfish</cpe>
+</suppress>
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #7026
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/org\.apache\.ftpserver/ftplet-api@.*$</packageUrl>
+   <cpe>cpe:/a:apache:apache_http_server</cpe>
+</suppress>
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #7035
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/org\.apache\.ftpserver/ftpserver-core@.*$</packageUrl>
+   <cpe>cpe:/a:apache:apache_http_server</cpe>
+</suppress>
+<suppress base="true">
+<notes><![CDATA[
+   FP per issue #7043
+   ]]></notes>
+<packageUrl regex="true">^pkg:maven/org\.apache\.ftpserver/ftplet-api@.*$</packageUrl>
+<cpe regex="true">^cpe:/a:apache:mina:.*</cpe>
+</suppress>
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #6981
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/io\.etcd/jetcd-core@.*$</packageUrl>
+   <cpe>cpe:/a:etcd:etcd</cpe>
+</suppress>
+<suppress base="true">
+<notes><![CDATA[
+   FP per issue #6981 - manual addition prometheus java_client libraries
+   seen as the prometheus server, but they would receive product client_java
+   (no CPE yet, but observed from the existing CPE for the go client client_go)
+   ]]></notes>
+<packageUrl regex="true">^pkg:maven/io\.prometheus/prometheus-.*$</packageUrl>
+<cpe>cpe:/a:prometheus:prometheus</cpe>
+</suppress>
+<suppress base="true">
+   <notes><![CDATA[
+   Original suppression as per #952 suppressed individual CVEs.
+   As per false negative #7057 MySQL java connector has CPEs of its own, so it's proper to suppress the server CPE
+   NOTE: the additional colon in the CPE is required to not match on prefix with cpe:/a:mysql:mysql_connector_j etc
+   ]]></notes>
+   <gav regex="true">^(mysql:mysql-connector-java|com\.mysql:mysql-connector-j|org\.drizzle\.jdbc:drizzle-jdbc):.*$</gav>
+   <cpe>cpe:/a:mysql:mysql:</cpe>
+   <cpe>cpe:/a:oracle:mysql:</cpe>
+</suppress>
+
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #6435
+   ]]></notes>
+   <packageUrl regex="true">^pkg:nuget/IronPython@.*$</packageUrl>
+   <cpe>cpe:/a:python:python</cpe>
+</suppress>
+<!-- suppressions above this entry were included in the 11.0.0 release -->
+
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #7066
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/com\.azure/azure-json@.*$</packageUrl>
+   <cpe>cpe:/a:microsoft:azure_cli</cpe>
+</suppress>
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #7073
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/org\.agrona/agrona@.*$</packageUrl>
+   <cpe>cpe:/a:protonmail:protonmail</cpe>
+</suppress>
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #7047
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/org\.mortbay\.jasper/apache-el@.*$</packageUrl>
+   <cpe>cpe:/a:eclipse:jetty</cpe>
+</suppress>
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #6431
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/com\.maciejwalkowiak\.spring/wiremock-spring-boot@.*$</packageUrl>
+   <cpe>cpe:/a:wiremock:wiremock</cpe>
+   <cpe>cpe:/a:wire:wire</cpe>
 </suppress>
 </suppressions>

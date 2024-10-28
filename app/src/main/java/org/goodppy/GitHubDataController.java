@@ -75,7 +75,7 @@ public class GitHubDataController {
 	/**
 	 * GitHub上のデータを収取する
 	 */
-	public void collectData() {
+	public String[] collectData() {
 		try {
 			HttpClient client = HttpClient.newHttpClient();
 			HttpRequest request = createRequest(getApiUrl());
@@ -85,6 +85,7 @@ public class GitHubDataController {
 			if (response.statusCode() == 200) {
 				System.out.println("Start collect data.");
 				JSONObject data = new JSONObject(response.body());
+				String repositoryName = getOwner() + "/" + getRepositoryName();
 				Integer stars = Integer.valueOf(data.getInt("stargazers_count"));
 				Integer forks = Integer.valueOf(data.getInt("forks_count"));
 				Integer contributors = getContributorsCount(client);
@@ -92,18 +93,23 @@ public class GitHubDataController {
 				Integer closedIssues = Integer.valueOf(getClosedIssuesCount(client));
 				Integer totalIssues = openIssues + closedIssues;
 				Double ratioOfClosedIssues = Double.valueOf(closedIssues) / Double.valueOf(totalIssues);
+				Long secondsTimeDifference = new CommitTimeDifference(getRepositoryUrl()).secondTimeDifference();
+				String[] dataList = { repositoryName, String.valueOf(stars), String.valueOf(forks),
+						String.valueOf(contributors), String.valueOf(openIssues), String.valueOf(closedIssues),
+						String.format("%.2f", ratioOfClosedIssues), secondsTimeDifference.toString() };
+				writeCsv(dataList);
 
-				writeCsv(String.valueOf(stars), String.valueOf(forks), String.valueOf(contributors),
-						String.valueOf(openIssues), String.valueOf(closedIssues),
-						String.format("%.2f", ratioOfClosedIssues));
+				return dataList;
 			} else {
 				handleRateLimit(response);
+
+				return new String[0];
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
 
-		return;
+			return new String[0];
+		}
 	}
 
 	/**
@@ -142,7 +148,6 @@ public class GitHubDataController {
 			Integer page = 1;
 
 			while (true) {
-				System.out.print(page + "* ");
 				HttpRequest request = createRequest(url + "&page=" + page);
 
 				HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -180,7 +185,6 @@ public class GitHubDataController {
 			Integer page = 1;
 
 			while (true) {
-				System.out.print(page + " ");
 				HttpRequest request = createRequest(url + "&page=" + page);
 
 				HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -249,7 +253,7 @@ public class GitHubDataController {
 		} catch (IOException e) {
 			e.printStackTrace();
 
-			return null;
+			return "";
 		}
 	}
 
@@ -281,13 +285,9 @@ public class GitHubDataController {
 	 * @param contributors        貢献者数
 	 * @param ratioOfClosedIssues Isuue解決の割合
 	 */
-	public void writeCsv(String stars, String forks, String contributors, String openIssues, String closedIssues,
-			String ratioOfClosedIssues) {
-		Long secondsTimeDifference = new CommitTimeDifference(getRepositoryUrl()).secondTimeDifference();
+	public void writeCsv(String[] dataList) {
 		String[] csvHeader = { "Repository Name", "Stars", "Forks", "Contributors", "OpenIssues", "ClosedIssues",
 				"RatioOfClosedIssues", "DifferenceBetweenLastCommitTimeAndCurrentTime" };
-		String[] csvData = { getOwner() + "/" + getRepositoryName(), stars, forks, contributors, openIssues,
-				closedIssues, ratioOfClosedIssues, secondsTimeDifference.toString() };
 		String directoryFilePathString = "./GitHubData/" + this.repositoryController.ownerAndRepositoryName();
 		String outputFile = "/githubData.csv";
 		File directoryFilePath = new File(directoryFilePathString);
@@ -296,7 +296,7 @@ public class GitHubDataController {
 		}
 		try (CSVWriter writer = new CSVWriter(new FileWriter(directoryFilePath + outputFile))) {
 			writer.writeNext(csvHeader);
-			writer.writeNext(csvData);
+			writer.writeNext(dataList);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

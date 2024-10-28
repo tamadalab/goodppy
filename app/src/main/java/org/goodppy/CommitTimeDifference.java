@@ -27,7 +27,7 @@ public class CommitTimeDifference {
 	 * 
 	 * @return 最終コミット時間と現在時刻の差[s]
 	 */
-	public Long secondTimeDifference() {
+	public Long secondTimeDifference() throws IOException, InterruptedException {
 		LocalDateTime currentDateTime = LocalDateTime.now();
 		LocalDateTime lastCommitDateTime = getLastDateTime();
 		Long secondsTimeDifference = calculateTimeDifference(currentDateTime, lastCommitDateTime);
@@ -53,26 +53,21 @@ public class CommitTimeDifference {
 	 * 
 	 * @return 最終コミット時間
 	 */
-	public LocalDateTime getLastDateTime() {
-		try {
-			Process process = new ProcessBuilder("git", "log", "-1", "--pretty=format:%cd", "--date=iso")
-					.directory(new File("./repositories/"+this.repositoryController.ownerAndRepositoryName()))
-					.start();
-			String commitDateString;
-			try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-				commitDateString = reader.readLine().trim();
-			}
-			Integer exitCode = process.waitFor();
-			if (exitCode != 0) {
-				System.out.println("Failed get last commit date.");
-			}
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss xxxx");
-
-			return LocalDateTime.parse(commitDateString, formatter);
-		} catch (IOException | InterruptedException e) {
-			e.printStackTrace();
-
-			return null;
+	public LocalDateTime getLastDateTime() throws IOException, InterruptedException {
+		Process process = new ProcessBuilder("git", "log", "-1", "--pretty=format:%cd", "--date=iso")
+				.directory(new File("./repositories/" + this.repositoryController.ownerAndRepositoryName()))
+				.start();
+		String commitDateString;
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+			commitDateString = reader.readLine().trim();
 		}
+		Integer exitCode = process.waitFor();
+		if (exitCode != 0) {
+			System.out.println("Failed get last commit date.");
+		}
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss xxxx");
+
+		return LocalDateTime.parse(commitDateString, formatter);
+
 	}
 }
