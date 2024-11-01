@@ -286,7 +286,7 @@ public class GitHubDataController {
 	 * @param ratioOfClosedIssues Isuue解決の割合
 	 */
 	public void writeCsv(String[] dataList) {
-		String[] csvHeader = { "Repository Name", "Stars", "Forks", "Contributors", "OpenIssues", "ClosedIssues",
+		String[] csvHeader = { "RepositoryName", "Stars", "Forks", "Contributors", "OpenIssues", "ClosedIssues",
 				"RatioOfClosedIssues", "DifferenceBetweenLastCommitTimeAndCurrentTime" };
 		String directoryFilePathString = "./GitHubData/" + this.repositoryController.ownerAndRepositoryName();
 		String outputFile = "/githubData.csv";
