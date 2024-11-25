@@ -1,8 +1,6 @@
 package org.goodppy;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
@@ -92,7 +90,10 @@ public class GitHubDataController {
 				Integer openIssues = Integer.valueOf(data.getInt("open_issues_count"));
 				Integer closedIssues = Integer.valueOf(getClosedIssuesCount(client));
 				Integer totalIssues = openIssues + closedIssues;
-				Double ratioOfClosedIssues = Double.valueOf(closedIssues) / Double.valueOf(totalIssues);
+				Double ratioOfClosedIssues = 0.0;
+				if (totalIssues != 0) {
+					ratioOfClosedIssues = Double.valueOf(closedIssues) / Double.valueOf(totalIssues);
+				}
 				Long secondsTimeDifference = new CommitTimeDifference(getRepositoryUrl()).secondTimeDifference();
 				String[] dataList = { repositoryName, String.valueOf(stars), String.valueOf(forks),
 						String.valueOf(contributors), String.valueOf(openIssues), String.valueOf(closedIssues),
@@ -242,19 +243,13 @@ public class GitHubDataController {
 	 * @return GitHub APIのトークン
 	 */
 	public String getToken() {
-		try {
-			String token;
-			File file = new File("./src/main/resource/GitHub_API_token");
-			BufferedReader reader = new BufferedReader(new FileReader(file));
-			token = reader.readLine();
-			reader.close();
-
-			return token;
-		} catch (IOException e) {
-			e.printStackTrace();
+		String token = System.getenv("GITHUB_API_TOKEN");
+		if (token == null) {
+			System.out.println("\"GitHub API Token is not set.\"");
 
 			return "";
 		}
+		return token;
 	}
 
 	/**
@@ -280,10 +275,7 @@ public class GitHubDataController {
 	/**
 	 * CSVファイルに書き込む
 	 * 
-	 * @param stars               スター数
-	 * @param forks               フォーク数
-	 * @param contributors        貢献者数
-	 * @param ratioOfClosedIssues Isuue解決の割合
+	 * @param dataList GitHub上のデータのリスト
 	 */
 	public void writeCsv(String[] dataList) {
 		String[] csvHeader = { "RepositoryName", "Stars", "Forks", "Contributors", "OpenIssues", "ClosedIssues",

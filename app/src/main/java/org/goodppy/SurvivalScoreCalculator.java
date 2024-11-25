@@ -1,7 +1,12 @@
 package org.goodppy;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.opencsv.CSVWriter;
 
 /**
  * 生存率の計算を行う
@@ -63,12 +68,29 @@ public class SurvivalScoreCalculator {
 	private static final double B6 = 0.01;
 
 	/**
+	 * GitHub上のデータのリスト
+	 */
+	private List<String> dataList = new ArrayList<String>();
+
+	/**
+	 * 評価するリポジトリについて操作を行う
+	 */
+	private RepositoryController repositoryController;
+
+	/**
 	 * コンストラクタ
 	 */
-	public SurvivalScoreCalculator() {
+	public SurvivalScoreCalculator(String repositoryUrl) {
+		this.repositoryController = new RepositoryController(repositoryUrl);
 	}
 
-	public void calculateSurvivalRate(String[] gitHubDataList, Double dependencyScore) {
+	/**
+	 * 生存スコアを計算する
+	 * 
+	 * @param gitHubDataList  GitHub上のデータのリスト
+	 * @param dependencyScore 依存関係スコア
+	 */
+	public void calculateSurvivalScore(String[] gitHubDataList, Double dependencyScore) {
 		List<Double> gitHubData = new ArrayList<Double>();
 		for (int i = 1; i < gitHubDataList.length; i++) {
 			if (i == 4 || i == 5) {
@@ -90,9 +112,24 @@ public class SurvivalScoreCalculator {
 
 		System.out.printf("Survival Score: %.4f%n", survivalScore);
 
+		this.dataList.add(this.repositoryController.getOwner() + "/" + this.repositoryController.getRepositoryName());
+		this.dataList.add(String.format("%.4f", survivalScore));
+		this.dataList.add(String.valueOf(dependencyScore));
+		this.dataList.add(String.valueOf(gitHubData.get(4)));
+		this.dataList.add(String.valueOf(gitHubData.get(3)));
+		this.dataList.add(String.valueOf(gitHubData.get(2)));
+		this.dataList.add(String.valueOf(gitHubData.get(0)));
+		this.dataList.add(String.valueOf(gitHubData.get(1)));
+		writeCsv();
+
 		return;
 	}
 
+	/**
+	 * 重みが"1"か確認する
+	 * 
+	 * @return 判定結果
+	 */
 	public int checkWeight() {
 		double W_all = W1 + W2 + W3 + W4 + W5 + W6;
 		if (W_all != 1.0) {
@@ -102,5 +139,29 @@ public class SurvivalScoreCalculator {
 		}
 
 		return 0;
+	}
+
+	/**
+	 * CSVファイルに書き込む
+	 */
+	public void writeCsv() {
+		String[] csvHeader = { "RepositoryName", "SurvivalScore", "DependencyScore",
+				"DifferenceBetweenLastCommitTimeAndCurrentTime", "RatioOfClosedIssues", "Contributors", "Stars",
+				"Forks" };
+		String[] dataListArray = this.dataList.toArray(new String[this.dataList.size()]);
+		String directoryFilePathString = "./scores/" + this.repositoryController.ownerAndRepositoryName();
+		String outputFile = "/score.csv";
+		File directoryFilePath = new File(directoryFilePathString);
+		if (directoryFilePath.exists() == false) {
+			directoryFilePath.mkdirs();
+		}
+		try (CSVWriter writer = new CSVWriter(new FileWriter(directoryFilePath + outputFile))) {
+			writer.writeNext(csvHeader);
+			writer.writeNext(dataListArray);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return;
 	}
 }

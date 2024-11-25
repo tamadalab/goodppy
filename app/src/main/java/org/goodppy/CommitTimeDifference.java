@@ -68,6 +68,5 @@ public class CommitTimeDifference {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss xxxx");
 
 		return LocalDateTime.parse(commitDateString, formatter);
-
 	}
 }

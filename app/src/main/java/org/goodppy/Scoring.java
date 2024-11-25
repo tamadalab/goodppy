@@ -46,17 +46,6 @@ public class Scoring {
 	}
 
 	/**
-	 * ビルドについて評定する
-	 * 
-	 * @param result ビルドの是非
-	 */
-	// public void evaluateBuild(List<String> result) {
-	// this.buildResult = result;
-
-	// return;
-	// }
-
-	/**
 	 * 依存関係について評定する
 	 */
 	public Double evaluateDependency() {

@@ -89,6 +89,14 @@ public class CsvController {
 			e.printStackTrace();
 		}
 
-		return null;
+		return ArrayListMultimap.create();
+	}
+
+/**
+ * csvファイルを書き出す
+ */
+	public void writeCsv(){
+
+		return;
 	}
 }

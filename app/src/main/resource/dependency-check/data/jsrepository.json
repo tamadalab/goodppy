@@ -2624,6 +2624,23 @@
         ]
       },
       {
+        "below": "1.2.0",
+        "severity": "medium",
+        "cwe": [
+          "CWE-79"
+        ],
+        "identifiers": {
+          "summary": "Versions of dojo prior to 1.2.0 are vulnerable to Cross-Site Scripting (XSS). The package fails to sanitize HTML code in user-controlled input, allowing attackers to execute arbitrary JavaScript in the victim's browser.",
+          "CVE": [
+            "CVE-2015-5654"
+          ],
+          "githubID": "GHSA-p82g-2xpp-m5r3"
+        },
+        "info": [
+          "https://nvd.nist.gov/vuln/detail/CVE-2015-5654"
+        ]
+      },
+      {
         "atOrAbove": "1.2",
         "below": "1.2.4",
         "severity": "medium",
@@ -2715,23 +2732,6 @@
           "https://dojotoolkit.org/blog/dojo-1-14-released",
           "https://github.com/advisories/GHSA-536q-8gxx-m782",
           "https://github.com/dojo/dojo/pull/307"
-        ]
-      },
-      {
-        "below": "1.9.1",
-        "severity": "medium",
-        "cwe": [
-          "CWE-79"
-        ],
-        "identifiers": {
-          "summary": "Versions of dojo prior to 1.2.0 are vulnerable to Cross-Site Scripting (XSS). The package fails to sanitize HTML code in user-controlled input, allowing attackers to execute arbitrary JavaScript in the victim's browser.",
-          "CVE": [
-            "CVE-2015-5654"
-          ],
-          "githubID": "GHSA-p82g-2xpp-m5r3"
-        },
-        "info": [
-          "https://nvd.nist.gov/vuln/detail/CVE-2015-5654"
         ]
       },
       {
@@ -4437,6 +4437,28 @@
       },
       {
         "atOrAbove": "0",
+        "below": "2.4.2",
+        "cwe": [
+          "CWE-1321"
+        ],
+        "severity": "high",
+        "identifiers": {
+          "summary": "DOMPurify vulnerable to tampering by prototype polution",
+          "CVE": [
+            "CVE-2024-48910"
+          ],
+          "githubID": "GHSA-p3vf-v8qc-cwcr"
+        },
+        "info": [
+          "https://github.com/advisories/GHSA-p3vf-v8qc-cwcr",
+          "https://github.com/cure53/DOMPurify/security/advisories/GHSA-p3vf-v8qc-cwcr",
+          "https://nvd.nist.gov/vuln/detail/CVE-2024-48910",
+          "https://github.com/cure53/DOMPurify/commit/d1dd0374caef2b4c56c3bd09fe1988c3479166dc",
+          "https://github.com/cure53/DOMPurify"
+        ]
+      },
+      {
+        "atOrAbove": "0",
         "below": "2.5.0",
         "cwe": [
           "CWE-79"
@@ -5190,6 +5212,27 @@
         },
         "info": [
           "https://github.com/advisories/GHSA-4p24-vmcr-4gqj"
+        ]
+      },
+      {
+        "atOrAbove": "1.4.0",
+        "below": "3.4.1",
+        "cwe": [
+          "CWE-79"
+        ],
+        "severity": "medium",
+        "identifiers": {
+          "summary": "Bootstrap Cross-Site Scripting (XSS) vulnerability for data-* attributes",
+          "CVE": [
+            "CVE-2024-6485"
+          ],
+          "githubID": "GHSA-vxmc-5x29-h64v"
+        },
+        "info": [
+          "https://github.com/advisories/GHSA-vxmc-5x29-h64v",
+          "https://nvd.nist.gov/vuln/detail/CVE-2024-6485",
+          "https://github.com/twbs/bootstrap",
+          "https://www.herodevs.com/vulnerability-directory/cve-2024-6485"
         ]
       },
       {
@@ -6817,7 +6860,7 @@
         ]
       },
       {
-        "atOrAbove": "13.4.0",
+        "atOrAbove": "13.3.1",
         "below": "13.5.0",
         "cwe": [
           "CWE-400"

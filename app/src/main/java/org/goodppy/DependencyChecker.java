@@ -1,8 +1,6 @@
 package org.goodppy;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -190,18 +188,13 @@ public class DependencyChecker {
 	 * @return APIキー
 	 */
 	public String getApiKey() {
-		try {
-			String apiKey;
-			File file = new File("./src/main/resource/dependency-check_APIkey");
-			BufferedReader reader = new BufferedReader(new FileReader(file));
-			apiKey = reader.readLine();
-			reader.close();
-			return apiKey;
-		} catch (IOException e) {
-			e.printStackTrace();
+		String apiKey = System.getenv("DEPENDENCY_CHECK_APIKEY");
+		if (apiKey == null) {
+			System.out.println("\"dependency-check API Key is not set.\"");
 
-			return new String();
+			return "";
 		}
+		return apiKey;
 	}
 
 	/**

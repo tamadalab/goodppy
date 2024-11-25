@@ -15,14 +15,14 @@ public class Main {
 	 * @param args コマンドライン引数
 	 */
 	public static void main(String[] args) {
-		SurvivalScoreCalculator survivalScoreCalculator = new SurvivalScoreCalculator();
-		if (survivalScoreCalculator.checkWeight() != 0) {
-			return;
-		}
 		String repositoriesList = "./src/main/resource/repositories.txt";
 		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(repositoriesList))) {
 			String repositoryUrl;
 			while ((repositoryUrl = bufferedReader.readLine()) != null) {
+				SurvivalScoreCalculator survivalScoreCalculator = new SurvivalScoreCalculator(repositoryUrl);
+				if (survivalScoreCalculator.checkWeight() != 0) {
+					return;
+				}
 				System.out.println("----------------------------------------");
 				System.out.printf("Start the evaluation of %s\n", repositoryUrl);
 				RepositoryController repositoryController = new RepositoryController(repositoryUrl);
@@ -40,7 +40,7 @@ public class Main {
 				Scoring scoring = new Scoring(repositoryUrl);
 				Double dependencyScore = scoring.evaluateDependency();
 				scoring.writeCsv(buildResult);
-				survivalScoreCalculator.calculateSurvivalRate(gitHubDataList, dependencyScore);
+				survivalScoreCalculator.calculateSurvivalScore(gitHubDataList, dependencyScore);
 				System.out.printf("End the evaluation of %s\n", repositoryUrl);
 			}
 			System.out.println("----------------------------------------");
