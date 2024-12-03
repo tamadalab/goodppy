@@ -143,33 +143,32 @@ public class RepositoryController {
 
 	/**
 	 * オーナー名とリポジトリ名のファイルパスを出力する
+	 * 
 	 * @return owner/repositoryName/
 	 */
 	public String ownerAndRepositoryName() {
 		return getOwner() + "/" + getRepositoryName() + "/";
 	}
 
-	// public void setLocalPath(String localPath) {
-	// this.localPath = localPath;
+	/**
+	 * jcenterをmavenCentralに置き換える
+	 */
+	public void replaceJCenter() {
+		String filePathString = getLocalPath() + "/build.gradle";
+		Path filePath = Paths.get(filePathString);
 
-	// return;
-	// }
+		if (!Files.exists(filePath)) {
+			filePathString = getLocalPath() + "/build.gradle.kts";
+			filePath = Paths.get(filePathString);
+		}
+		try {
+			String content = Files.readString(filePath);
+			String updateContent = content.replace("jcenter()", "mavenCentral()");
+			Files.writeString(filePath, updateContent);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
-	// public void setOwner(String owner) {
-	// this.owner = owner;
-
-	// return;
-	// }
-
-	// public void setRepositoryName(String repositoryName) {
-	// this.repositoryName = repositoryName;
-
-	// return;
-	// }
-
-	// public void setRepositoryUrl(String repositoryUrl) {
-	// this.repositoryUrl = repositoryUrl;
-
-	// return;
-	// }
+		return;
+	}
 }

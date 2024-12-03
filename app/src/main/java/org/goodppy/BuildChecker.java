@@ -56,12 +56,12 @@ public class BuildChecker {
 	 * @param repositoryUrl リポジトリのURL
 	 */
 	public List<String> buildCheck(Path localPath) {
-		// Evaluate evaluate = new Evaluate(getRepositoryUrl());
 		String failed = "failed";
 		String successful = "successful";
 		List<String> result = new ArrayList<String>();
 		try {
 			String[] javaLTS = { "8", "11", "17", "21" };
+			repositoryController.replaceJCenter();
 			for (int i = 0; i < javaLTS.length; i++) {
 				ProcessBuilder builder = new ProcessBuilder();
 				System.out.println("Start the build by java" + javaLTS[i] + "...");
