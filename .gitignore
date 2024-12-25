@@ -35,3 +35,12 @@ repositories/
 
 # Ignore dependency reports
 dependency_reports/
+
+# Ignore result
+result/
+
+# Ignore GitHub Data
+GitHubData/
+
+# Ignore scores
+scores/

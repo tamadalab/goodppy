@@ -31,14 +31,12 @@ public class CsvController {
 
 	/**
 	 * コンストラクタ
+	 * @param repositoryUrl リポジトリのURL
 	 */
 	public CsvController(String repositoryUrl) {
-		// this.dependencies = new LinkedHashMap<>();
 		this.dependencies = ArrayListMultimap.create();
 		this.repositoryController = new RepositoryController(repositoryUrl);
-		this.csvFilePathString = "./dependency_reports/"
-				+ this.repositoryController.ownerAndRepositoryName()
-				+ "/dependency-check-report.csv";
+		this.csvFilePathString = new DependencyChecker(repositoryUrl).dependencyCheck(this.repositoryController.getLocalPath());
 
 		return;
 	}
@@ -60,6 +58,8 @@ public class CsvController {
 	 */
 	public void putDependencies(String dependencyName, List<String> dependencyData) {
 		this.dependencies.put(dependencyName, dependencyData);
+
+		return;
 	}
 
 	/**
@@ -84,8 +84,16 @@ public class CsvController {
 			return this.dependencies;
 		} catch (Exception e) {
 			e.printStackTrace();
-
-			return null;
 		}
+
+		return ArrayListMultimap.create();
+	}
+
+/**
+ * csvファイルを書き出す
+ */
+	public void writeCsv(){
+
+		return;
 	}
 }

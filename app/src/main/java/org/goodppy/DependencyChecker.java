@@ -47,7 +47,7 @@ public class DependencyChecker {
 	 * @param repositoryUrl リポジトリのURL
 	 */
 	public DependencyChecker(String repositoryUrl) {
-		this.apiKey = "422f8e6a-c993-4428-a626-dacec5e8dcb5";
+		this.apiKey = getApiKey();
 		this.repositoryController = new RepositoryController(repositoryUrl);
 		// ./logs/dependency/owner/repositoryName/
 		this.logFileDirectory = "./logs/dependency/" + this.repositoryController.ownerAndRepositoryName();
@@ -83,7 +83,7 @@ public class DependencyChecker {
 		CsvController csvController = new CsvController(getRepositoryUrl());
 		Multimap<String, List<String>> dependencies = csvController.readCsv();
 		Integer[] scores = { 0, 0, 0, 0, 0 };
-		for(Map.Entry<String, List<String>> entry : dependencies.entries()){
+		for (Map.Entry<String, List<String>> entry : dependencies.entries()) {
 			// String key = entry.getKey();
 			// String dependencyName = key;
 			// String vulnerability = entry.getValue().get(0);
@@ -95,20 +95,30 @@ public class DependencyChecker {
 		return scores;
 	}
 
-	/**
-	 * 依存関係に脆弱性がないかをチェックする
-	 */
-	public void dependencyCheck(Path localPath) {
+/**
+ * 依存関係に脆弱性がないかをチェックする
+ * @param localPath  クローン先のディレクトリのパス
+ * @return レポートのパス
+ */
+	public String dependencyCheck(Path localPath) {
+		Calendar calendar = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+		String directoryPath = "./dependency_reports/" + this.repositoryController.ownerAndRepositoryName();
+		String reportPath = directoryPath + sdf.format(calendar.getTime()) + "_report.csv";
+		File directoryFile = new File(directoryPath);
+		if (!directoryFile.exists()) {
+			directoryFile.mkdirs();
+		}
 		try {
 			System.out.println("Start check dependencies...");
 			ProcessBuilder builder = new ProcessBuilder();
 			builder.command("./src/main/resource/dependency-check/bin/dependency-check.sh",
-					"--nvdApiKey", getApiKey(),
+					"--nvdApiKey", this.apiKey,
 					"--project", getRepositoryName(),
 					"--scan", localPath.toString(),
-					"--out", "./dependency_reports/" + this.repositoryController.ownerAndRepositoryName(),
-					"--format", "CSV"); // 依存関係を調べる
-			builder.directory(new File("."));
+					"--out", reportPath,
+					"--format", "CSV");
+			builder.directory(new File("./"));
 			createFile();
 			builder.redirectErrorStream(true);
 			builder.redirectOutput(generateLogfilePath().toFile());
@@ -120,7 +130,7 @@ public class DependencyChecker {
 				long end = System.nanoTime();
 				System.out.println("Time taked to check dependencies : " + (end - start) + "ns");
 
-				return;
+				return reportPath;
 			}
 			System.out.println("Success");
 			long end = System.nanoTime();
@@ -129,7 +139,7 @@ public class DependencyChecker {
 			e.printStackTrace();
 		}
 
-		return;
+		return reportPath;
 	}
 
 	/**
@@ -154,7 +164,7 @@ public class DependencyChecker {
 				scores[3] += 1;
 			}
 			default -> {
-				
+
 			}
 		}
 		scores[4]++;
@@ -182,8 +192,19 @@ public class DependencyChecker {
 		return logFilePath;
 	}
 
+	/**
+	 * APIキーを取得する
+	 * 
+	 * @return APIキー
+	 */
 	public String getApiKey() {
-		return this.apiKey;
+		String apiKey = System.getenv("DEPENDENCY_CHECK_APIKEY");
+		if (apiKey == null) {
+			System.out.println("\"dependency-check API Key is not set.\"");
+
+			return new String();
+		}
+		return apiKey;
 	}
 
 	/**

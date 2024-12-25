@@ -30,6 +30,12 @@ dependencies {
 	// https://mvnrepository.com/artifact/com.opencsv/opencsv
 	implementation group: 'com.opencsv', name: 'opencsv', version: '5.9'
 
+	// https://mvnrepository.com/artifact/org.json/json
+	implementation group: 'org.json', name: 'json', version: '20240303'
+
+	// https://mvnrepository.com/artifact/org.apache.commons/commons-math3
+	implementation group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1'
+
 	// implementation 'org.slf4j:slf4j-api:1.7.30'
 	// implementation 'org.slf4j:slf4j-log4j12:1.7.30'
 }

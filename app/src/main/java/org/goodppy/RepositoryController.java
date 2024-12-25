@@ -1,5 +1,6 @@
 package org.goodppy;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -48,6 +49,27 @@ public class RepositoryController {
 	}
 
 	/**
+	 * リポジトリを削除する
+	 * 
+	 * @param directory ディレクトリ
+	 */
+	private static void deleteDirectory(File directory) {
+		try {
+			if (directory.isDirectory()) {
+				File[] files = directory.listFiles();
+				if (files != null) {
+					for (File file : files) {
+						deleteDirectory(file);
+					}
+				}
+			}
+			Files.delete(directory.toPath());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
 	 * クローン先のディレクトリのパスを取得する
 	 * 
 	 * @return クローン先のディレクトリのパス
@@ -88,17 +110,11 @@ public class RepositoryController {
 	 */
 	public void gitClone() {
 		try {
-			if (getLocalPath().toFile().exists() == true) {
+			if (getLocalPath().toFile().exists()) {
 				System.out.println("This repository is already clone.");
 				System.out.println("This repository is deleting now...");
-				try {
-					Files.delete(getLocalPath());
-					System.out.println("This repository has been deleted.");
-				} catch (IOException e) {
-					e.getStackTrace();
-				}
-
-				return;
+				deleteDirectory(getLocalPath().toFile());
+				System.out.println("This repository has been deleted.");
 			}
 			System.out.println("Repository is being cloned...");
 			Git.cloneRepository()
@@ -125,31 +141,34 @@ public class RepositoryController {
 		return urlParts;
 	}
 
+	/**
+	 * オーナー名とリポジトリ名のファイルパスを出力する
+	 * 
+	 * @return owner/repositoryName/
+	 */
 	public String ownerAndRepositoryName() {
 		return getOwner() + "/" + getRepositoryName() + "/";
 	}
 
-	// public void setLocalPath(String localPath) {
-	// this.localPath = localPath;
+	// /**
+	//  * jcenterをmavenCentralに置き換える
+	//  */
+	// public void replaceJCenter() {
+	// 	String filePathString = getLocalPath() + "/build.gradle";
+	// 	Path filePath = Paths.get(filePathString);
 
-	// return;
-	// }
+	// 	if (!Files.exists(filePath)) {
+	// 		filePathString = getLocalPath() + "/build.gradle.kts";
+	// 		filePath = Paths.get(filePathString);
+	// 	}
+	// 	try {
+	// 		String content = Files.readString(filePath);
+	// 		String updateContent = content.replace("jcenter()", "mavenCentral()");
+	// 		Files.writeString(filePath, updateContent);
+	// 	} catch (IOException e) {
+	// 		e.printStackTrace();
+	// 	}
 
-	// public void setOwner(String owner) {
-	// this.owner = owner;
-
-	// return;
-	// }
-
-	// public void setRepositoryName(String repositoryName) {
-	// this.repositoryName = repositoryName;
-
-	// return;
-	// }
-
-	// public void setRepositoryUrl(String repositoryUrl) {
-	// this.repositoryUrl = repositoryUrl;
-
-	// return;
+	// 	return;
 	// }
 }
