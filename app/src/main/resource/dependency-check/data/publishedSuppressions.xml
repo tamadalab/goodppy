@@ -2001,4 +2001,98 @@ only pkg:maven/org.clojure:clojure@.* is the CPE cpe:/a:clojure:clojure
    <packageUrl regex="true">^pkg:maven/com\.amazonaws/aws-java-sdk-opensearch@.*$</packageUrl>
    <cpe>cpe:/a:amazon:opensearch</cpe>
 </suppress>
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #7209
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/org\.webjars\.npm/url-parse@.*$</packageUrl>
+   <cpe>cpe:/a:parse-url_project:parse-url</cpe>
+</suppress>
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #7207
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/com\.datomic/memcache-asg-java-client@.*$</packageUrl>
+   <cpe>cpe:/a:memcache_project:memcache</cpe>
+</suppress>
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #7216
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/com\.azure\.resourcemanager/azure-resourcemanager-msi@.*$</packageUrl>
+   <cpe>cpe:/a:microsoft:azure_cli</cpe>
+</suppress>
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #7215
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/com\.azure\.resourcemanager/azure-resourcemanager@.*$</packageUrl>
+   <cpe>cpe:/a:microsoft:azure_cli</cpe>
+</suppress>
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #7214
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/com\.amazonaws/aws-java-sdk-marketplacedeployment@.*$</packageUrl>
+   <cpe>cpe:/a:amazon:aws_deployment_framework</cpe>
+</suppress>
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #7229
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/cd\.go\.plugin\.base/gocd-plugin-base@.*$</packageUrl>
+   <cpe>cpe:/a:thoughtworks:gocd</cpe>
+</suppress>
+<suppress base="true">
+   <notes><![CDATA[
+      FP per issue #7226
+      NPM node-windows sudowin sudo.exe binary is not Linux sudo project, but https://github.com/akutz/sudowin
+      ]]></notes>
+   <filePath regex="true">.*/node-windows/bin/sudowin/sudo.exe</filePath>
+   <cpe>cpe:/a:sudo:sudo</cpe>
+   <cpe>cpe:/a:sudo_project:sudo</cpe>
+</suppress>
+
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #7225
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/com\.datomic/memcache-asg-java-client@.*$</packageUrl>
+   <cpe>cpe:/a:memcached:memcached</cpe>
+</suppress>
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #7188
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/fish\.payara\.security\.connectors/security-connectors-api@.*$</packageUrl>
+   <cpe>cpe:/a:payara:payara</cpe>
+</suppress>
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #7238
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/com\.microsoft\.azure/msal4j-persistence-extension@.*$</packageUrl>
+   <cpe>cpe:/a:microsoft:authentication_library</cpe>
+</suppress>
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #6679
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/com\.google\.cloud\.tools/jib-build-plan@.*$</packageUrl>
+   <cpe>cpe:/a:jib_project:jib</cpe>
+</suppress>
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #6491
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/com\.azure/azure-identity-extensions@.*$</packageUrl>
+   <cpe>cpe:/a:microsoft:azure_cli</cpe>
+</suppress>
+<suppress base="true">
+   <notes><![CDATA[
+   FP per issue #7247
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/com\.google\.cloud\.opentelemetry/detector-resources-support@.*$</packageUrl>
+   <cpe>cpe:/a:opentelemetry:opentelemetry</cpe>
+</suppress>
 </suppressions>

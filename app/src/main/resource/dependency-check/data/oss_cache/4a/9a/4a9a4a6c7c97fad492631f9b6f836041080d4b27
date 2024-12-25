@@ -1,0 +1,1 @@
+{"coordinates":"pkg:maven/org.eclipse.jetty/jetty-server@12.0.16","description":"The core jetty server artifact.","reference":"https://ossindex.sonatype.org/component/pkg:maven/org.eclipse.jetty/jetty-server@12.0.16?utm_source\u003ddependency-check\u0026utm_medium\u003dintegration\u0026utm_content\u003d10.0.3","vulnerabilities":[],"sonatypeOssiScore":0.0}

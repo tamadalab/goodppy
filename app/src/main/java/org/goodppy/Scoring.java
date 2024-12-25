@@ -3,7 +3,9 @@ package org.goodppy;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import com.opencsv.CSVWriter;
@@ -99,15 +101,18 @@ public class Scoring {
 	 * @param buildResult ビルドの結果リスト
 	 */
 	public void writeCsv(List<String> buildResult) {
+		Calendar calendar = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
 		this.buildResult = buildResult;
 		String directoryFilePathString = "./result/"
 				+ this.repositoryController.ownerAndRepositoryName();
-		String outputFile = "/result.csv";
+		// /yyyyMMdd_HHmmss_result.csv
+		String outputFile = "/" + sdf.format(calendar.getTime()) + "_result.csv";
 		String[] header = { "repositoryName", "build_java8", "build_java11", "build_java17", "build_java21",
 				"dependencyScore", "critical", "high", "medium", "low" };
 		String[] data = { this.repositoryController.getOwner() + "/" + this.repositoryController.getRepositoryName(),
 				this.buildResult.get(0), this.buildResult.get(1), this.buildResult.get(2), this.buildResult.get(3),
-				this.dependencyResult.get(0), this.dependencyResult.get(1),this.dependencyResult.get(2),
+				this.dependencyResult.get(0), this.dependencyResult.get(1), this.dependencyResult.get(2),
 				this.dependencyResult.get(3), this.dependencyResult.get(4)
 		};
 		File directoryFilePath = new File(directoryFilePathString);

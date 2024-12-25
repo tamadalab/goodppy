@@ -3,7 +3,9 @@ package org.goodppy;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import com.opencsv.CSVWriter;
@@ -145,12 +147,15 @@ public class SurvivalScoreCalculator {
 	 * CSVファイルに書き込む
 	 */
 	public void writeCsv() {
+		Calendar calendar = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
 		String[] csvHeader = { "RepositoryName", "SurvivalScore", "DependencyScore",
 				"DifferenceBetweenLastCommitTimeAndCurrentTime", "RatioOfClosedIssues", "Contributors", "Stars",
 				"Forks" };
 		String[] dataListArray = this.dataList.toArray(new String[this.dataList.size()]);
 		String directoryFilePathString = "./scores/" + this.repositoryController.ownerAndRepositoryName();
-		String outputFile = "/score.csv";
+		// /yyyyMMdd_HHmmss_score.csv
+		String outputFile = "/" + sdf.format(calendar.getTime()) + "_score.csv";
 		File directoryFilePath = new File(directoryFilePathString);
 		if (directoryFilePath.exists() == false) {
 			directoryFilePath.mkdirs();

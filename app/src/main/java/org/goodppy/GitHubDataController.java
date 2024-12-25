@@ -7,6 +7,8 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 import org.json.JSONArray;
@@ -97,7 +99,7 @@ public class GitHubDataController {
 				Long secondsTimeDifference = new CommitTimeDifference(getRepositoryUrl()).secondTimeDifference();
 				String[] dataList = { repositoryName, String.valueOf(stars), String.valueOf(forks),
 						String.valueOf(contributors), String.valueOf(openIssues), String.valueOf(closedIssues),
-						String.format("%.2f", ratioOfClosedIssues), secondsTimeDifference.toString() };
+						String.format("%.4f", ratioOfClosedIssues), secondsTimeDifference.toString() };
 				writeCsv(dataList);
 
 				return dataList;
@@ -278,10 +280,13 @@ public class GitHubDataController {
 	 * @param dataList GitHub上のデータのリスト
 	 */
 	public void writeCsv(String[] dataList) {
+		Calendar calendar = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
 		String[] csvHeader = { "RepositoryName", "Stars", "Forks", "Contributors", "OpenIssues", "ClosedIssues",
 				"RatioOfClosedIssues", "DifferenceBetweenLastCommitTimeAndCurrentTime" };
 		String directoryFilePathString = "./GitHubData/" + this.repositoryController.ownerAndRepositoryName();
-		String outputFile = "/githubData.csv";
+		// /yyyyMMdd_HHmmss_githubData.csv
+		String outputFile = "/" + sdf.format(calendar.getTime()) + "_githubData.csv";
 		File directoryFilePath = new File(directoryFilePathString);
 		if (directoryFilePath.exists() == false) {
 			directoryFilePath.mkdirs();

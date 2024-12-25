@@ -95,10 +95,20 @@ public class DependencyChecker {
 		return scores;
 	}
 
-	/**
-	 * 依存関係に脆弱性がないかをチェックする
-	 */
-	public void dependencyCheck(Path localPath) {
+/**
+ * 依存関係に脆弱性がないかをチェックする
+ * @param localPath  クローン先のディレクトリのパス
+ * @return レポートのパス
+ */
+	public String dependencyCheck(Path localPath) {
+		Calendar calendar = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+		String directoryPath = "./dependency_reports/" + this.repositoryController.ownerAndRepositoryName();
+		String reportPath = directoryPath + sdf.format(calendar.getTime()) + "_report.csv";
+		File directoryFile = new File(directoryPath);
+		if (!directoryFile.exists()) {
+			directoryFile.mkdirs();
+		}
 		try {
 			System.out.println("Start check dependencies...");
 			ProcessBuilder builder = new ProcessBuilder();
@@ -106,8 +116,8 @@ public class DependencyChecker {
 					"--nvdApiKey", this.apiKey,
 					"--project", getRepositoryName(),
 					"--scan", localPath.toString(),
-					"--out", "./dependency_reports/" + this.repositoryController.ownerAndRepositoryName(),
-					"--format", "CSV"); // 依存関係を調べる
+					"--out", reportPath,
+					"--format", "CSV");
 			builder.directory(new File("./"));
 			createFile();
 			builder.redirectErrorStream(true);
@@ -120,7 +130,7 @@ public class DependencyChecker {
 				long end = System.nanoTime();
 				System.out.println("Time taked to check dependencies : " + (end - start) + "ns");
 
-				return;
+				return reportPath;
 			}
 			System.out.println("Success");
 			long end = System.nanoTime();
@@ -129,7 +139,7 @@ public class DependencyChecker {
 			e.printStackTrace();
 		}
 
-		return;
+		return reportPath;
 	}
 
 	/**
@@ -192,7 +202,7 @@ public class DependencyChecker {
 		if (apiKey == null) {
 			System.out.println("\"dependency-check API Key is not set.\"");
 
-			return "";
+			return new String();
 		}
 		return apiKey;
 	}

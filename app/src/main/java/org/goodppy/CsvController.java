@@ -34,12 +34,9 @@ public class CsvController {
 	 * @param repositoryUrl リポジトリのURL
 	 */
 	public CsvController(String repositoryUrl) {
-		// this.dependencies = new LinkedHashMap<>();
 		this.dependencies = ArrayListMultimap.create();
 		this.repositoryController = new RepositoryController(repositoryUrl);
-		this.csvFilePathString = "./dependency_reports/"
-				+ this.repositoryController.ownerAndRepositoryName()
-				+ "/dependency-check-report.csv";
+		this.csvFilePathString = new DependencyChecker(repositoryUrl).dependencyCheck(this.repositoryController.getLocalPath());
 
 		return;
 	}

@@ -29,12 +29,10 @@ public class Main {
 				repositoryController.gitClone();
 				BuildChecker buildChecker = new BuildChecker(repositoryUrl);
 				List<String> buildResult = buildChecker.buildCheck(repositoryController.getLocalPath());
-				if (buildResult.stream().allMatch(result -> result.equals("failed"))) {
-					System.out.println("Build failed for all Java LTS versions.");
-					continue;
-				}
-				DependencyChecker dependencyChecker = new DependencyChecker(repositoryUrl);
-				dependencyChecker.dependencyCheck(repositoryController.getLocalPath());
+				// if (buildResult.stream().allMatch(result -> result.equals("failed"))) {
+				// 	System.out.println("Build failed for all Java LTS versions.");
+				// 	continue;
+				// }
 				GitHubDataController gitHubDataController = new GitHubDataController(repositoryUrl);
 				String[] gitHubDataList = gitHubDataController.collectData();
 				Scoring scoring = new Scoring(repositoryUrl);

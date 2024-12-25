@@ -150,25 +150,25 @@ public class RepositoryController {
 		return getOwner() + "/" + getRepositoryName() + "/";
 	}
 
-	/**
-	 * jcenterをmavenCentralに置き換える
-	 */
-	public void replaceJCenter() {
-		String filePathString = getLocalPath() + "/build.gradle";
-		Path filePath = Paths.get(filePathString);
+	// /**
+	//  * jcenterをmavenCentralに置き換える
+	//  */
+	// public void replaceJCenter() {
+	// 	String filePathString = getLocalPath() + "/build.gradle";
+	// 	Path filePath = Paths.get(filePathString);
 
-		if (!Files.exists(filePath)) {
-			filePathString = getLocalPath() + "/build.gradle.kts";
-			filePath = Paths.get(filePathString);
-		}
-		try {
-			String content = Files.readString(filePath);
-			String updateContent = content.replace("jcenter()", "mavenCentral()");
-			Files.writeString(filePath, updateContent);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	// 	if (!Files.exists(filePath)) {
+	// 		filePathString = getLocalPath() + "/build.gradle.kts";
+	// 		filePath = Paths.get(filePathString);
+	// 	}
+	// 	try {
+	// 		String content = Files.readString(filePath);
+	// 		String updateContent = content.replace("jcenter()", "mavenCentral()");
+	// 		Files.writeString(filePath, updateContent);
+	// 	} catch (IOException e) {
+	// 		e.printStackTrace();
+	// 	}
 
-		return;
-	}
+	// 	return;
+	// }
 }
